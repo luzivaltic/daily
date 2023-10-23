@@ -11,7 +11,7 @@ export const POST = async (req: Request) => {
   }
 
   if (password.length < 8) {
-    NextResponse.json({ message: "Password don't reach minimum length" }, { status: 400 });
+    NextResponse.json({ message: "Password didn't reach minimum length" }, { status: 400 });
   }
   
   const users: User[] | null = await prisma.user.findMany({

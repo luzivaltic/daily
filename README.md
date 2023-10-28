@@ -43,6 +43,20 @@ $ npm install @prisma/client
 $ npx prisma init
 ```
 
+- Install `sql` on terminal and create new user
+```
+$ CREATE USER 'daily'@'localhost' IDENTIFIED BY 'password'
+$ GRANT ALL PRIVILEGES ON *.* TO 'daily'@'localhost' WITH GRANT OPTION;
+$ FLUSH PRIVILEGES;
+```
+
+- CREATE DATABASE `daily`
+```
+$ CREATE DATABASE daily;
+```
+
+- Change `DATABASE_URL` on .env to `mysql://daily:password@localhost:3306/daily`
+
 - Create / Modify `models` on file `schema.prisma`
 - Migrate
 ```

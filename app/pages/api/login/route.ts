@@ -16,9 +16,17 @@ export const POST = async (req: Request) => {
     },
   });
 
-  if (!user || !bcrypt.compare(password, user.hash_password)) {
+  if (!user) {
     return NextResponse.json(
-      { message: "Incorrect email or password!" },
+      { message: "Incorrect email!" },
+      { status: 404 }
+    );
+  }
+
+  const passwordMatch = await bcrypt.compare(password, user?.hash_password);
+  if (passwordMatch === false) {
+    return NextResponse.json(
+      { message: "Incorrect password!" },
       { status: 404 }
     );
   }

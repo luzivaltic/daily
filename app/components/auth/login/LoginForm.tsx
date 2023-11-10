@@ -24,11 +24,8 @@ const LoginForm = () => {
       method: 'POST',
       body: JSON.stringify(userInfo),
     });
-
-    console.log(response.status);
   
     const responseData = await response.json();
-    console.log(responseData);
 
     assert(response.status === 200);
 

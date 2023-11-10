@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/material";
-import LoginForm from "@/app/components/auth/LoginForm";
+import LoginForm from "@/app/components/auth/login/LoginForm";
 import AuthMenu from "@/app/components/auth/AuthMenu";
 
 const LoginPage: NextPage = () => {

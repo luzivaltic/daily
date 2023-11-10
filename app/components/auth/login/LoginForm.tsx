@@ -1,9 +1,12 @@
 'use client'
-import { Button, Grid, Link, TextField } from "@mui/material";
+import { Button, Grid, InputAdornment, Link, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import UserInfo from "./types";
+import UserInfo from "../types";
 import { useRouter } from "next/navigation";
+import EmailTextField from "../EmailTextField";
+import PasswordTextField from "../PasswordTextField";
+import SubmitButton from "../SubmitButton";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -40,7 +43,7 @@ const LoginForm = () => {
         }}
       >
         <Typography component="h1" variant="h5">
-          Sign in
+          <b>Sign in</b>
         </Typography>
         <Box
           component="form"
@@ -48,38 +51,14 @@ const LoginForm = () => {
           onSubmit={ handleSubmit }
           sx={{ mt: 5, mb: 5 }}
         >
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign In
-          </Button>
+          <EmailTextField />
+          <PasswordTextField name="password" label="Password" />
+          <SubmitButton content="login" />
+          
           <Grid container>
             <Grid item>
               Don't have an account ?
-              <Link href="/pages/auth/signup">
+              <Link href="/pages/auth/signup" style={{ textDecoration: 'none' }}>
                 {" Sign Up"}
               </Link>
             </Grid>

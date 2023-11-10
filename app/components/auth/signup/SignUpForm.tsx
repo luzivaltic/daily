@@ -1,9 +1,15 @@
 'use client'
-import { Button, Grid, Link, TextField } from "@mui/material";
+import { Button, Grid, InputAdornment, Link, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import UserInfo from "./types";
+import UserInfo from "../types";
 import { useRouter } from "next/navigation";
+import PersonIcon from '@mui/icons-material/Person';
+import LockIcon from '@mui/icons-material/Lock';
+import SubmitButton from "../SubmitButton";
+import UsernameTextField from "../UsernameTextField";
+import EmailTextField from "../EmailTextField";
+import PasswordTextField from "../PasswordTextField";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -42,7 +48,7 @@ const SignUpForm = () => {
         }}
       >
         <Typography component="h1" variant="h5">
-          Sign Up
+          <b>Sign Up</b>
         </Typography>
         <Box
           component="form"
@@ -50,58 +56,16 @@ const SignUpForm = () => {
           onSubmit={ handleSubmit }
           sx={{ mt: 3, mb: 2 }}
         >
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="passwordConfirm"
-            label="Password confirm"
-            type="password"
-            id="password-confirm"
-            autoComplete="passwordConfirm"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign Up
-          </Button>
+          <UsernameTextField />
+          <EmailTextField />
+          <PasswordTextField name="password" label="Password"/>
+          <PasswordTextField name="passwordConfirm" label="Password Confirm" />
+          <SubmitButton content="sign up" />
+          
           <Grid container>
             <Grid item>
               Already have an account
-              <Link href="/pages/auth/login">
+              <Link href="/pages/auth/login" style={{ textDecoration: 'none' }}>
                 {" Login"}
               </Link>
             </Grid>

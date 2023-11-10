@@ -10,6 +10,7 @@ import SubmitButton from "../SubmitButton";
 import UsernameTextField from "../UsernameTextField";
 import EmailTextField from "../EmailTextField";
 import PasswordTextField from "../PasswordTextField";
+import assert from "assert";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -30,10 +31,9 @@ const SignUpForm = () => {
       body: JSON.stringify(userInfo),
     });
 
-    router.push('/pages/auth/login'); // redirect to login
+    assert(response.status === 201);
 
-    const responseData = await response.json();
-    return responseData;
+    router.push('/pages/auth/login'); // redirect to login
   };
 
   return (

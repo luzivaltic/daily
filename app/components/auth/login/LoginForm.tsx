@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import EmailTextField from "../EmailTextField";
 import PasswordTextField from "../PasswordTextField";
 import SubmitButton from "../SubmitButton";
+import assert from "assert";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -23,12 +24,13 @@ const LoginForm = () => {
       method: 'POST',
       body: JSON.stringify(userInfo),
     });
+  
+    const responseData = await response.json();
+
+    assert(response.status === 200);
 
     // redirect to main page
     router.push('/');
-
-    const responseData = await response.json();
-    return responseData;
   };
 
   return (

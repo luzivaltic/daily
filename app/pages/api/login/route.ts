@@ -6,19 +6,19 @@ const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 
 export const POST = async (req: Request) => {
-  const { username, password } = await req.json();
+  const { email, password } = await req.json();
 
   const user: User | null = await prisma.user.findFirst({
     where: {
-      username: {
-        equals: username,
+      email: {
+        equals: email,
       },
     },
   });
 
   if (!user || !bcrypt.compare(password, user.hash_password)) {
     return NextResponse.json(
-      { message: "Incorrect username or password!" },
+      { message: "Incorrect email or password!" },
       { status: 404 }
     );
   }

@@ -5,19 +5,23 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 export const POST = async (req: Request) => {
-  const { username, email, password } = await req.json();
-  if (!username || !password) {
+  const { username, email, password, passwordConfirm } = await req.json();
+  if (!username || !email || !password || !passwordConfirm) {
     NextResponse.json({ message: "Invalid username or password" }, { status: 400 });
   }
 
   if (password.length < 8) {
     NextResponse.json({ message: "Password didn't reach minimum length" }, { status: 400 });
   }
+
+  if (password != passwordConfirm) {
+    NextResponse.json({ message: "Password didn't match" }, { status: 400 });
+  }
   
   const users: User[] | null = await prisma.user.findMany({
     where: {
-      username: {
-        equals: username
+      email: {
+        equals: email
       }
     }
   });

@@ -11,8 +11,61 @@ datasource db {
 }
 
 model User {
-  id String @id @default(cuid())
-  username String
-  email String
-  hash_password String
+  id            String    @id @default(cuid())
+  username      String
+  email         String    @unique
+  hash_password String    @unique
+  learning      Learning?
+}
+
+model Learning {
+  id       String    @id @default(cuid())
+  user     User      @relation(fields: [user_id], references: [id])
+  user_id  String    @unique
+  subjects Subject[]
+}
+
+model Subject {
+  id          String    @id @default(cuid())
+  learning    Learning  @relation(fields: [learning_id], references: [id])
+  learning_id String    
+  chapters    Chapter[]
+  title       String?
+}
+
+model Chapter {
+  id         String      @id @default(cuid())
+  subject    Subject     @relation(fields: [subject_id], references: [id])
+  subject_id String      
+  title      String?
+  flashcards FlashCard[]
+}
+
+model FlashCard {
+  id           String  @id @default(cuid())
+  chapter      Chapter @relation(fields: [chapter_id], references: [id])
+  chapter_id   String  
+  front_blocks Block[] @relation("FrontBlocks")
+  back_blocks  Block[] @relation("BackBlocks")
+}
+
+model Block {
+  id              String      @id @default(cuid())
+  content_type    ContentType @relation(fields: [content_type_id], references: [id])
+  content_type_id String
+
+  front_flashcard    FlashCard? @relation("FrontBlocks", fields: [front_flashcard_id], references: [id])
+  front_flashcard_id String?
+
+  back_flashcard    FlashCard? @relation("BackBlocks", fields: [back_flashcard_id], references: [id])
+  back_flashcard_id String?
+
+  content_text      String
+  content_image_url String
+}
+
+model ContentType {
+  id     String  @id @default(cuid())
+  type   String
+  blocks Block[]
 }

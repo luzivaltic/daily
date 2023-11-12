@@ -13,8 +13,8 @@ datasource db {
 model User {
   id            String    @id @default(cuid())
   username      String
-  email         String
-  hash_password String
+  email         String    @unique
+  hash_password String    @unique
   learning      Learning?
 }
 
@@ -28,7 +28,7 @@ model Learning {
 model Subject {
   id          String    @id @default(cuid())
   learning    Learning  @relation(fields: [learning_id], references: [id])
-  learning_id String    @unique
+  learning_id String    
   chapters    Chapter[]
   title       String?
 }
@@ -36,7 +36,7 @@ model Subject {
 model Chapter {
   id         String      @id @default(cuid())
   subject    Subject     @relation(fields: [subject_id], references: [id])
-  subject_id String      @unique
+  subject_id String      
   title      String?
   flashcards FlashCard[]
 }
@@ -44,7 +44,7 @@ model Chapter {
 model FlashCard {
   id           String  @id @default(cuid())
   chapter      Chapter @relation(fields: [chapter_id], references: [id])
-  chapter_id   String  @unique
+  chapter_id   String  
   front_blocks Block[] @relation("FrontBlocks")
   back_blocks  Block[] @relation("BackBlocks")
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from 'bcrypt';
+import { ACCESS_TOKEN_LIFE, ACCESS_TOKEN_SECRET } from "@/app/env";
 
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
@@ -31,12 +32,12 @@ export const POST = async (req: Request) => {
     );
   }
 
-  const token = jwt.sign({ sub: user.id }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: process.env.ACCESS_TOKEN_LIFE
+  const token = jwt.sign({ sub: user.id }, ACCESS_TOKEN_SECRET, {
+    expiresIn: ACCESS_TOKEN_LIFE
   });
 
   return NextResponse.json({ 
-    "access token": token, 
+    "access_token": token, 
     message: "Login Success"
   }, { status: 200 });
 };

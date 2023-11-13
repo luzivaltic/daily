@@ -11,6 +11,7 @@ import UsernameTextField from "../UsernameTextField";
 import EmailTextField from "../EmailTextField";
 import PasswordTextField from "../PasswordTextField";
 import assert from "assert";
+import { BASE_URL } from "@/app/env";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -25,7 +26,7 @@ const SignUpForm = () => {
       password: data.get('password'),
       passwordConfirm: data.get('passwordConfirm'),
     }
-    const url = process.env.BASE_URL + '/pages/api/signup';
+    const url = BASE_URL + '/pages/api/signup';
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(userInfo),

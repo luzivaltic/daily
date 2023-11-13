@@ -8,9 +8,12 @@ import EmailTextField from "../EmailTextField";
 import PasswordTextField from "../PasswordTextField";
 import SubmitButton from "../SubmitButton";
 import assert from "assert";
+import { useCookies } from 'next-client-cookies';
+import { BASE_URL, ACCESS_TOKEN_LIFE } from "@/app/env";
 
 const LoginForm = () => {
   const router = useRouter();
+  const cookies = useCookies();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -19,7 +22,7 @@ const LoginForm = () => {
       email: data.get('email'),
       password: data.get('password')
     }
-    const url = process.env.BASE_URL + '/pages/api/login';
+    const url = BASE_URL + '/pages/api/login';
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(userInfo),
@@ -28,7 +31,14 @@ const LoginForm = () => {
     const responseData = await response.json();
 
     assert(response.status === 200);
-
+    cookies.set(
+      'access_token', 
+      responseData.access_token, 
+      { 
+        secure: true,
+        expires: new Date(Date.now() + parseInt(ACCESS_TOKEN_LIFE) * 1000)
+      }
+    );
     // redirect to main page
     router.push('/');
   };

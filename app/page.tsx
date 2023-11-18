@@ -1,7 +1,11 @@
 'use client'
+import "./page.css";
+import { CookiesProvider, useCookies } from "next-client-cookies";
+import ButtonAppBar from "./components/ButtonAppBar";
+import { SideNavBar } from "./components/SideNavBar";
+import { MainMenu } from "./components/MainMenu";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { CookiesProvider, useCookies } from "next-client-cookies";
 
 const Home = () => {
   const router = useRouter();
@@ -17,13 +21,16 @@ const Home = () => {
       router.replace('/pages/auth/login');
     }
   }, []);
-
   return (
     <CookiesProvider value={[]}>
-      <div>
-        Main Page
-      </div>
-    </CookiesProvider>
+      <header>
+        <ButtonAppBar />
+      </header>
+      <div className="container">
+        <SideNavBar />
+        <MainMenu />
+      </div>    
+      </CookiesProvider>
   )
 };
 

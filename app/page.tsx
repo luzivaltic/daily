@@ -1,12 +1,11 @@
 'use client'
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { CookiesProvider, useCookies } from "next-client-cookies";
 import "./page.css";
 import ButtonAppBar from "./components/ButtonAppBar";
 import { SideNavBar } from "./components/SideNavBar";
 import { MainMenu } from "./components/MainMenu";
-
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
   const router = useRouter();

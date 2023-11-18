@@ -19,7 +19,7 @@ export const POST = async (req: Request) => {
 
   if (!user) {
     return NextResponse.json(
-      { message: "Incorrect email!" },
+      { message: "Incorrect email or password!" },
       { status: 404 }
     );
   }

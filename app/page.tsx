@@ -6,7 +6,6 @@ import { SideNavBar } from "./components/SideNavBar";
 import { MainMenu } from "./components/MainMenu";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { CookiesProvider, useCookies } from "next-client-cookies";
 
 const Home = () => {
   const router = useRouter();

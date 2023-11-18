@@ -25,9 +25,9 @@ export const SideNavBar = () => {
         </IconWrapper>
       </NavBarBoxItem>
 
-      {listSubject.map((subjectName) => {
+      {listSubject.map((subjectName, index) => {
         return (
-          <NavBarBoxItem key={subjectName}>
+          <NavBarBoxItem key={index}>
             <IconWrapper>
               <LocalLibraryIcon />
             </IconWrapper>
@@ -36,18 +36,22 @@ export const SideNavBar = () => {
         );
       })}
 
-      <Button
-        sx={{
-          position: "absolute",
-          bottom: "20px",
-          backgroundColor: "#E8E8E8",
-          color: "black",
-          borderRadius: "100px",
-          padding: "10px 20px",
+      <div
+        style={{
+          marginTop: "auto",
         }}
       >
-        <AddIcon sx={{ marginRight: "10px" }} /> New subject
-      </Button>
+        <Button
+          sx={{
+            backgroundColor: "#E8E8E8",
+            color: "black",
+            borderRadius: "100px",
+            padding: "10px 20px",
+          }}
+        >
+          <AddIcon sx={{ marginRight: "10px" }} /> New subject
+        </Button>
+      </div>
     </div>
   );
 };

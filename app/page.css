@@ -20,14 +20,13 @@ body {
     flex-grow: 1;
     display: flex;  
     .side-bar {
-        position: relative;
-        display: inline-flex;
+        display: flex;
         flex-direction: column;
         gap: 10px;
         width: 300px;
         height: 100%;
         padding: 10px;
-        background-color: gray;
+        background-color: #D9D9D9;
     }
 
     .main-menu {

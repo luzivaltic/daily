@@ -2,6 +2,11 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { CookiesProvider, useCookies } from "next-client-cookies";
+import "./page.css";
+import ButtonAppBar from "./components/ButtonAppBar";
+import { SideNavBar } from "./components/SideNavBar";
+import { MainMenu } from "./components/MainMenu";
+
 
 const Home = () => {
   const router = useRouter();
@@ -17,13 +22,16 @@ const Home = () => {
       router.replace('/pages/auth/login');
     }
   }, []);
-
   return (
     <CookiesProvider value={[]}>
-      <div>
-        Main Page
-      </div>
-    </CookiesProvider>
+      <header>
+        <ButtonAppBar />
+      </header>
+      <div className="container">
+        <SideNavBar />
+        <MainMenu />
+      </div>    
+      </CookiesProvider>
   )
 };
 

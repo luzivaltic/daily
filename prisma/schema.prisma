@@ -20,14 +20,14 @@ model User {
 
 model Learning {
   id       String    @id @default(cuid())
-  user     User      @relation(fields: [user_id], references: [id])
+  user     User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id  String    @unique
   subjects Subject[]
 }
 
 model Subject {
   id          String    @id @default(cuid())
-  learning    Learning  @relation(fields: [learning_id], references: [id])
+  learning    Learning  @relation(fields: [learning_id], references: [id], onDelete: Cascade)
   learning_id String    
   chapters    Chapter[]
   title       String?
@@ -35,7 +35,7 @@ model Subject {
 
 model Chapter {
   id         String      @id @default(cuid())
-  subject    Subject     @relation(fields: [subject_id], references: [id])
+  subject    Subject     @relation(fields: [subject_id], references: [id], onDelete: Cascade)
   subject_id String      
   title      String?
   flashcards FlashCard[]
@@ -43,7 +43,7 @@ model Chapter {
 
 model FlashCard {
   id           String  @id @default(cuid())
-  chapter      Chapter @relation(fields: [chapter_id], references: [id])
+  chapter      Chapter @relation(fields: [chapter_id], references: [id], onDelete: Cascade)
   chapter_id   String  
   front_blocks Block[] @relation("FrontBlocks")
   back_blocks  Block[] @relation("BackBlocks")
@@ -51,13 +51,13 @@ model FlashCard {
 
 model Block {
   id              String      @id @default(cuid())
-  content_type    ContentType @relation(fields: [content_type_id], references: [id])
+  content_type    ContentType @relation(fields: [content_type_id], references: [id], onDelete: Cascade)
   content_type_id String
 
-  front_flashcard    FlashCard? @relation("FrontBlocks", fields: [front_flashcard_id], references: [id])
+  front_flashcard    FlashCard? @relation("FrontBlocks", fields: [front_flashcard_id], references: [id], onDelete: Cascade)
   front_flashcard_id String?
 
-  back_flashcard    FlashCard? @relation("BackBlocks", fields: [back_flashcard_id], references: [id])
+  back_flashcard    FlashCard? @relation("BackBlocks", fields: [back_flashcard_id], references: [id], onDelete: Cascade)
   back_flashcard_id String?
 
   content_text      String

@@ -20,8 +20,10 @@
   },
   "devDependencies": {
     "@mui/icons-material": "^5.14.16",
+    "@premieroctet/next-crud": "^3.0.0",
     "@prisma/client": "^5.4.2",
     "@types/bcrypt": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.9.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -30,6 +32,7 @@
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
     "jsonwebtoken": "^9.0.2",
+    "next-auth": "^4.24.5",
     "next-client-cookies": "^1.0.6",
     "prisma": "^5.4.2",
     "react": "^18.2.0",

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from 'bcrypt';
-import { ACCESS_TOKEN_LIFE, ACCESS_TOKEN_SECRET } from "@/app/env";
+import { JWT_EXPIRE, JWT_SECRET } from "@/app/env";
 
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
@@ -11,9 +11,7 @@ export const POST = async (req: Request) => {
 
   const user: User | null = await prisma.user.findFirst({
     where: {
-      email: {
-        equals: email,
-      },
+      email: { equals: email, },
     },
   });
 
@@ -32,8 +30,8 @@ export const POST = async (req: Request) => {
     );
   }
 
-  const token = jwt.sign({ sub: user.id }, ACCESS_TOKEN_SECRET, {
-    expiresIn: ACCESS_TOKEN_LIFE
+  const token = jwt.sign({ sub: user.id }, JWT_SECRET, {
+    expiresIn: JWT_EXPIRE
   });
 
   return NextResponse.json({ 

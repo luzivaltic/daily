@@ -9,7 +9,7 @@ import PasswordTextField from "../PasswordTextField";
 import SubmitButton from "../SubmitButton";
 import assert from "assert";
 import { useCookies } from 'next-client-cookies';
-import { BASE_URL, ACCESS_TOKEN_LIFE } from "@/app/env";
+import { BASE_URL, JWT_EXPIRE } from "@/app/env";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -36,7 +36,7 @@ const LoginForm = () => {
       responseData.access_token, 
       { 
         secure: true,
-        expires: new Date(Date.now() + parseInt(ACCESS_TOKEN_LIFE) * 1000)
+        expires: new Date(Date.now() + parseInt(JWT_EXPIRE) * 1000)
       }
     );
     // redirect to main page

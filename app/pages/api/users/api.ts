@@ -97,7 +97,7 @@ export const getUserById = async (userId: string) => {
 
   return NextResponse.json(
     {
-      message: `There is no user match with ${userId}!`,
+      message: `There is no matched user!`,
     },
     { status: 400 }
   );

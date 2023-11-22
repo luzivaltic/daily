@@ -28,7 +28,7 @@ model Learning {
 model Subject {
   id          String    @id @default(cuid())
   learning    Learning  @relation(fields: [learning_id], references: [id], onDelete: Cascade)
-  learning_id String    
+  learning_id String
   chapters    Chapter[]
   title       String?
 }

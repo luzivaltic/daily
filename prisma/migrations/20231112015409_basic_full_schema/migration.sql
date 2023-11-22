@@ -13,7 +13,7 @@ CREATE TABLE `Subject` (
     `learning_id` VARCHAR(191) NOT NULL,
     `title` VARCHAR(191) NULL,
 
-    UNIQUE INDEX `Subject_learning_id_key`(`learning_id`),
+    -- UNIQUE INDEX `Subject_learning_id_key`(`learning_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -23,7 +23,7 @@ CREATE TABLE `Chapter` (
     `subject_id` VARCHAR(191) NOT NULL,
     `title` VARCHAR(191) NULL,
 
-    UNIQUE INDEX `Chapter_subject_id_key`(`subject_id`),
+    -- UNIQUE INDEX `Chapter_subject_id_key`(`subject_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -32,7 +32,7 @@ CREATE TABLE `FlashCard` (
     `id` VARCHAR(191) NOT NULL,
     `chapter_id` VARCHAR(191) NOT NULL,
 
-    UNIQUE INDEX `FlashCard_chapter_id_key`(`chapter_id`),
+    -- UNIQUE INDEX `FlashCard_chapter_id_key`(`chapter_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

@@ -5,7 +5,7 @@ import { UserUpdateInfo } from "../signup/types";
 import requireAuth from "../../middlewares";
 
 // modify user info
-export const POST = async (req: Request) => {
+export const PUT = async (req: Request) => {
   const header = req.headers;
   const { isAuthorized, userId }: any = await requireAuth(header);
  

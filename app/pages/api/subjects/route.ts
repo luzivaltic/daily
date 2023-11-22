@@ -1,4 +1,4 @@
-import { PrismaClient, Learning, Subject } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import requireAuth from "@/app/pages/middlewares";
 
@@ -53,8 +53,6 @@ export const POST = async (req: Request) => {
     );
   }
 };
-
-export const PUT = (req: Request) => {};
 
 export const DELETE = async (req: Request) => {
   const header = req.headers;

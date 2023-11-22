@@ -23,15 +23,3 @@ export const GET = async (req: Request) => {
 
   return NextResponse.json({ blocks: blocks });
 };
-
-export const POST = async (req: Request) => {
-  
-};
-
-export const PUT = (req: Request) => {
-
-};
-
-export const DELETE = (req: Request) => {
-
-};

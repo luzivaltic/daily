@@ -53,8 +53,6 @@ export const POST = async (req: Request) => {
   }
 };
 
-export const PUT = async (req: Request) => {};
-
 export const DELETE = async (req: Request) => {
   const header = req.headers;
   const { isAuthorized, userId }: any = await requireAuth(header);

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { deleteUserById, getUserById } from "./api";
+import { deleteUserById } from "./api";
 import { updateUser } from "./api";
 import { UserUpdateInfo } from "../signup/types";
 import requireAuth from "../../middlewares";

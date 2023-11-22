@@ -14,6 +14,8 @@ export const NavBarBoxItem = ({ children, ...boxProps }: Props) => {
         alignItems: "center",
         padding: "5px",
         borderRadius: "10px",
+        cursor: "pointer",
+        width: "100%",
       }}
     >
       {children}

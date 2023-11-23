@@ -73,6 +73,6 @@ export const DELETE = async (req: Request) => {
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json({ error: "Learning is not exist!" }, { status: 404 });
+    return NextResponse.json({ error: "Learning do not exist!" }, { status: 404 });
   }
 };

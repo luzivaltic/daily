@@ -4,22 +4,28 @@ import requireAuth from "@/app/pages/middlewares";
 
 const prisma = new PrismaClient();
 
-export const GET = async (req: Request) => {
+export const GET = async (req: Request, { params }: { params: { chapterId: string } }) => {
   const header = req.headers;
   const { isAuthorized, userId }: any = await requireAuth(header);
 
   if (!isAuthorized || !userId) {
     return NextResponse.json({ error: "Unauthorized!" }, { status: 401 });
   }
-  
-  const blocks = await prisma.block.findMany({
+
+  const chapterId: string = params.chapterId;
+
+  const flashcards = prisma.flashCard.findMany({
     where: {
-      OR: [
-        { front_flashcard: { chapter: { subject: { learning: { user_id: userId } } } } },
-        { back_flashcard: { chapter: { subject: { learning: { user_id: userId } } } } },
-      ]
-    },
+      chapter: {
+        id: chapterId,
+        subject: {
+          learning: {
+            user_id: userId
+          }
+        }
+      }
+    }
   });
 
-  return NextResponse.json({ blocks: blocks });
+  return NextResponse.json({ flashcards: flashcards }, { status: 200 });
 };

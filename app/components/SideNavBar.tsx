@@ -4,21 +4,31 @@ import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { IconWrapper } from "./IconWrapper";
 import { NavBarBoxItem } from "./NavBarBoxItem";
 import { NavListItemButton } from "./NavListItemButton";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ExpandLess from "@mui/icons-material/ExpandLess";
-import ArticleIcon from "@mui/icons-material/Article";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { ChapterList } from "./ChapterList";
+import axios, { HeadersDefaults } from "axios";
+import { BASE_URL } from "../env";
+import { useCookies } from "next-client-cookies";
+
+type Subject = {
+  title: String;
+};
+
+interface CommonHeaderProperties extends HeadersDefaults {
+  Authorization: string;
+}
 
 export const SideNavBar = () => {
-  const listSubject = [
-    "Network safety and Security",
-    "Computer Graphics",
-    "Network Programming",
-    "Web Application Development",
-  ];
-
-  const listChapter = ["Chapter 1", "Chapter 2", "Chapter 3"];
+  const cookies = useCookies();
+  const [listSubject, setListSubject] = useState([]);
+  const [listChapter, setListChapter] = useState([]);
   const [chosenSubject, setChosenSubject] = useState(10000);
+
+  axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.get(
+    "access_token"
+  )}`;
 
   const handleClickSubject = (index: number) => {
     if (chosenSubject == index) {
@@ -27,6 +37,54 @@ export const SideNavBar = () => {
       setChosenSubject(index);
     }
   };
+
+  const getListSubject = async () => {
+    const listSubject = await axios.get(`${BASE_URL}/pages/api/subjects`);
+    return listSubject.data.subjects;
+  };
+
+  const getLearning = async () => {
+    const leanring = await axios.get(`${BASE_URL}/pages/api/learning`);
+    return leanring.data.learning;
+  };
+
+  const createNewSubject = async () => {
+    const learning = await getLearning();
+    const listSubject = await getListSubject();
+
+    return await axios
+      .post(`${BASE_URL}/pages/api/subjects`, {
+        learningId: learning.id,
+        title: "Untitled",
+      })
+      .then((subject) => console.log("successfully created subject: ", subject))
+      .then(() => updateStateListSubject())
+      .catch((err) => console.log("failed to create new subject: ", err));
+  };
+
+  const createNewChapter = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    subjectIndex: Number
+  ) => {
+    e.stopPropagation();
+    return await axios.post(`${BASE_URL}/pages/api/chapters`, {
+      subjectId: "100",
+      title: "Untitled",
+    });
+  };
+
+  const updateStateListSubject = async () => {
+    const newListSubject = await getListSubject();
+    setListSubject(newListSubject);
+  };
+
+  const updateStateListChapter = async () => {
+    
+  };
+
+  useEffect(() => {
+    updateStateListSubject();
+  }, []);
 
   return (
     <div className="side-bar">
@@ -38,7 +96,7 @@ export const SideNavBar = () => {
       </NavBarBoxItem>
 
       <List disablePadding>
-        {listSubject.map((subjectName, subjectIndex) => {
+        {listSubject.map((subject: Subject, subjectIndex) => {
           return (
             <>
               <NavListItemButton
@@ -61,44 +119,41 @@ export const SideNavBar = () => {
                     }}
                   >
                     {" "}
-                    {subjectName}{" "}
+                    {subject.title}{" "}
                   </span>
-                  <IconWrapper
-                    style={{
-                      backgroundColor: "transparent",
+                  <Button
+                    sx={{
+                      margin: 0,
+                      padding: 0,
+                      minWidth: "unset",
                     }}
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    <MoreHorizIcon />
-                  </IconWrapper>
+                    <IconWrapper bgcolor="transparent">
+                      <MoreHorizIcon />
+                    </IconWrapper>
+                  </Button>
+
+                  <Button
+                    sx={{
+                      margin: 0,
+                      padding: 0,
+                      minWidth: "unset",
+                    }}
+                    onClick={(e) => createNewChapter(e, subjectIndex)}
+                  >
+                    <IconWrapper bgcolor="transparent">
+                      <AddIcon />
+                    </IconWrapper>
+                  </Button>
                 </NavBarBoxItem>
               </NavListItemButton>
 
-              <Collapse
-                in={subjectIndex == chosenSubject}
-                timeout="auto"
-                unmountOnExit
-              >
-                {listChapter.map((chapterName, chapterIndex) => {
-                  return (
-                    <NavListItemButton
-                      style={{
-                        marginLeft: "20px",
-                      }}
-                      key={chapterName}
-                    >
-                      <NavBarBoxItem>
-                        <IconWrapper>
-                          <ArticleIcon />
-                        </IconWrapper>
-                        <span style={{ marginLeft: "10px" }}>
-                          {" "}
-                          {chapterName}{" "}
-                        </span>
-                      </NavBarBoxItem>
-                    </NavListItemButton>
-                  );
-                })}
-              </Collapse>
+              <ChapterList
+                subjectIndex={subjectIndex}
+                chosenSubject={chosenSubject}
+                listChapter={listChapter}
+              />
             </>
           );
         })}
@@ -116,6 +171,7 @@ export const SideNavBar = () => {
             borderRadius: "100px",
             padding: "10px 20px",
           }}
+          onClick={createNewSubject}
         >
           <AddIcon sx={{ marginRight: "10px" }} /> New subject
         </Button>

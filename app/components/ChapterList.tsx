@@ -16,21 +16,21 @@ export const ChapterList = ({
   chosenSubject,
   listChapter,
 }: ChapterListProps) => {
-  return (
+    return (
     <Collapse in={subjectIndex == chosenSubject} timeout="auto" unmountOnExit>
-      {listChapter.map((chapterName, chapterIndex) => {
+      {listChapter.map((chapter) => {
         return (
           <NavListItemButton
             style={{
               marginLeft: "20px",
             }}
-            key={chapterName}
+            key={chapter.id}
           >
             <NavBarBoxItem>
               <IconWrapper>
                 <ArticleIcon />
               </IconWrapper>
-              <span style={{ marginLeft: "10px" }}> {chapterName} </span>
+              <span style={{ marginLeft: "10px" }}> {chapter.title} </span>
             </NavBarBoxItem>
           </NavListItemButton>
         );

@@ -13,7 +13,14 @@ import { BASE_URL } from "../env";
 import { useCookies } from "next-client-cookies";
 
 type Subject = {
-  title: String;
+  id: string;
+  title: string;
+};
+
+type Chapter = {
+  id: string;
+  title: string;
+  subject_id: string;
 };
 
 interface CommonHeaderProperties extends HeadersDefaults {
@@ -22,8 +29,8 @@ interface CommonHeaderProperties extends HeadersDefaults {
 
 export const SideNavBar = () => {
   const cookies = useCookies();
-  const [listSubject, setListSubject] = useState([]);
-  const [listChapter, setListChapter] = useState([]);
+  const [listSubject, setListSubject] = useState<Subject[]>([]);
+  const [listChapter, setListChapter] = useState<Chapter[]>([]);
   const [chosenSubject, setChosenSubject] = useState(10000);
 
   axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.get(
@@ -50,7 +57,6 @@ export const SideNavBar = () => {
 
   const createNewSubject = async () => {
     const learning = await getLearning();
-    const listSubject = await getListSubject();
 
     return await axios
       .post(`${BASE_URL}/pages/api/subjects`, {
@@ -62,15 +68,24 @@ export const SideNavBar = () => {
       .catch((err) => console.log("failed to create new subject: ", err));
   };
 
+  const getListChapter = async (subjectId: string) => {
+    const listChapter = await axios.get(
+      `${BASE_URL}/pages/api/chapters/${subjectId}`
+    );
+    return listChapter.data.chapters;
+  };
+
   const createNewChapter = async (
     e: React.MouseEvent<HTMLButtonElement>,
-    subjectIndex: Number
+    subjectIndex: number
   ) => {
     e.stopPropagation();
-    return await axios.post(`${BASE_URL}/pages/api/chapters`, {
-      subjectId: "100",
-      title: "Untitled",
-    });
+    return await axios
+      .post(`${BASE_URL}/pages/api/chapters`, {
+        subjectId: listSubject[subjectIndex].id,
+        title: "Untitled",
+      })
+      .then(() => updateStateListChapter());
   };
 
   const updateStateListSubject = async () => {
@@ -79,8 +94,17 @@ export const SideNavBar = () => {
   };
 
   const updateStateListChapter = async () => {
-    
+    if (chosenSubject != 10000) {
+      const newListChapter = await getListChapter(
+        listSubject[chosenSubject].id
+      );
+      setListChapter(newListChapter);
+    }
   };
+
+  useEffect(() => {
+    updateStateListChapter();
+  }, [chosenSubject]);
 
   useEffect(() => {
     updateStateListSubject();
@@ -95,7 +119,13 @@ export const SideNavBar = () => {
         </p>
       </NavBarBoxItem>
 
-      <List disablePadding>
+      <List
+        disablePadding
+        sx={{
+          maxHeight: "70vh",
+          overflow: "auto",
+        }}
+      >
         {listSubject.map((subject: Subject, subjectIndex) => {
           return (
             <>
@@ -116,6 +146,8 @@ export const SideNavBar = () => {
                       marginLeft: "10px",
                       whiteSpace: "nowrap",
                       flex: 1,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
                     }}
                   >
                     {" "}

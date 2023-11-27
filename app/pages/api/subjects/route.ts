@@ -77,9 +77,9 @@ export const PUT = async (req: Request) => {
       }
     });
 
-    return NextResponse.json({ message: "Update successfully!" }, { status: 200 });
+    return NextResponse.json({ message: "Update subject successfully!" }, { status: 200 });
   } catch (error) {
-    return NextResponse.error();
+    return NextResponse.json({ error: "Update subject fail!" }, { status: 400 });
   }
 };
 

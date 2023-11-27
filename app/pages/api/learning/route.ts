@@ -73,9 +73,9 @@ export const PUT = async (req: Request) => {
       }
     });
 
-    return NextResponse.json({ message: "Update successfully!" }, { status: 200 });
+    return NextResponse.json({ message: "Update Learning successfully!" }, { status: 200 });
   } catch (error) {
-    return NextResponse.error();
+    return NextResponse.json({ error: "Update learning fail!" }, { status: 400 });
   }
 };
 

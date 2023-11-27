@@ -11,6 +11,7 @@ import { ChapterList } from "./ChapterList";
 import axios, { HeadersDefaults } from "axios";
 import { BASE_URL } from "../env";
 import { useCookies } from "next-client-cookies";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 
 type Subject = {
   id: string;
@@ -136,7 +137,7 @@ export const SideNavBar = () => {
                 <NavBarBoxItem key={subjectIndex}>
                   <IconWrapper>
                     {subjectIndex == chosenSubject ? (
-                      <ExpandLess />
+                      <ExpandMore />
                     ) : (
                       <LocalLibraryIcon />
                     )}

@@ -56,6 +56,36 @@ export const POST = async (req: Request) => {
   }
 };
 
+export const PUT = async (req: Request) => {
+  const header = req.headers;
+  const { isAuthorized, userId }: any = await requireAuth(header);
+
+  if (!isAuthorized || !userId) {
+    return NextResponse.json({ error: "Unauthorized!" }, { status: 401 });
+  }
+
+  try {
+    const { chapterId, subjectId } = await req.json();
+    await prisma.chapter.update({
+      where: {
+        id: chapterId,
+        subject: {
+          learning: {
+            user_id: userId,
+          }
+        }
+      },
+      data: {
+        subject_id: subjectId,
+      }
+    });
+
+    return NextResponse.json({ message: "Update successfully!" }, { status: 200 });
+  } catch (error) {
+    return NextResponse.error();
+  }
+};
+
 export const DELETE = async (req: Request) => {
   const header = req.headers;
   const { isAuthorized, userId }: any = await requireAuth(header);

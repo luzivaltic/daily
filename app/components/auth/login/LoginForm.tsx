@@ -1,5 +1,5 @@
 'use client'
-import { Button, Grid, InputAdornment, Link, TextField } from "@mui/material";
+import { Grid, Link } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import UserInfo from "../types";
@@ -11,7 +11,7 @@ import assert from "assert";
 import { useCookies } from 'next-client-cookies';
 import { BASE_URL, JWT_EXPIRE } from "@/app/env";
 
-const LoginForm = () => {
+export const LoginForm = () => {
   const router = useRouter();
   const cookies = useCookies();
 
@@ -44,8 +44,7 @@ const LoginForm = () => {
   };
 
   return (
-    <>
-      <Box
+    <Box
         sx={{
           my: 8,
           mx: 4,
@@ -77,8 +76,5 @@ const LoginForm = () => {
           </Grid>
         </Box>
       </Box>
-    </>
   );
 };
-
-export default LoginForm;

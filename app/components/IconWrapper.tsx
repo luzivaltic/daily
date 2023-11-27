@@ -3,10 +3,12 @@ import { ReactNode } from "react";
 
 interface Props extends PaperProps {
   children: ReactNode;
+  bgcolor?: string;
 }
 
 export const IconWrapper = ({ children, ...paperProps }: Props) => {
-  const something: ReactNode = [];
+  const { bgcolor } = paperProps; 
+  
   return (
     <Paper
       elevation={0}
@@ -16,8 +18,11 @@ export const IconWrapper = ({ children, ...paperProps }: Props) => {
         justifyContent: "center",
         alignItems: "center",
         padding: "5px",
-        borderRadius: "12px",
-        backgroundColor: "#E8E8E8",
+        borderRadius: "10px",
+        backgroundColor: bgcolor ? bgcolor : "#E8E8E8",
+        ":hover": {
+          backgroundColor: "gray",
+        },
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import "./page.css";
 import { CookiesProvider, useCookies } from "next-client-cookies";
 import ButtonAppBar from "./components/ButtonAppBar";

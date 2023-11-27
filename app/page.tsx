@@ -5,35 +5,38 @@ import ButtonAppBar from "./components/ButtonAppBar";
 import { SideNavBar } from "./components/SideNavBar";
 import { MainMenu } from "./components/MainMenu";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import axios from "axios";
-import { BASE_URL } from "./env";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const router = useRouter();
   const cookies = useCookies();
-
-  const isAuthorizeUser = () => {
-    const cookie = cookies.get("access_token");
-    return cookie != undefined;
-  };
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    if (isAuthorizeUser() === false) {
-      router.replace("/pages/auth/login");
+    const cookie = cookies.get('access_token');
+    const valid = cookie !== undefined;
+    setIsAuthorized(valid);
+
+    if (!valid) {
+      router.push('/pages/auth/login');
     }
   }, []);
-  return (
-    <CookiesProvider value={[]}>
-      <header>
-        <ButtonAppBar />
-      </header>
-      <div className="container">
-        <SideNavBar />
-        <MainMenu />
-      </div>
-    </CookiesProvider>
-  );
+  
+  if (isAuthorized) {
+    return (
+      <CookiesProvider value={[]}>
+        <header>
+          <ButtonAppBar />
+        </header>
+        <div className="container">
+          <SideNavBar />
+          <MainMenu />
+        </div>    
+      </CookiesProvider>
+    )
+  } else {
+    return null;
+  }
 };
 
 export default Home;

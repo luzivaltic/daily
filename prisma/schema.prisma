@@ -36,19 +36,19 @@ model Subject {
 model Chapter {
   id         String      @id @default(cuid())
   subject    Subject     @relation(fields: [subject_id], references: [id], onDelete: Cascade)
-  subject_id String      
+  subject_id String
   title      String?
   flashcards FlashCard[]
 }
 
 model FlashCard {
-  id           String  @id @default(cuid())
-  chapter      Chapter @relation(fields: [chapter_id], references: [id], onDelete: Cascade)
-  chapter_id   String  
-  front_content String
-  back_content String
-  front_blocks Block[] @relation("FrontBlocks")
-  back_blocks  Block[] @relation("BackBlocks")
+  id            String  @id @default(cuid())
+  chapter       Chapter @relation(fields: [chapter_id], references: [id], onDelete: Cascade)
+  chapter_id    String
+  front_content String?
+  back_content  String?
+  front_blocks  Block[] @relation("FrontBlocks")
+  back_blocks   Block[] @relation("BackBlocks")
 }
 
 model Block {

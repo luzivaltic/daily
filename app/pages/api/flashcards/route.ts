@@ -36,11 +36,13 @@ export const POST = async (req: Request) => {
   }
 
   try {
-    const { chapterId } = await req.json();
-
+    const { chapterId, frontContent, backContent } = await req.json();
+    
     const newFlashCard = await prisma.flashCard.create({
       data: {
         chapter_id: chapterId,
+        front_content: frontContent,
+        back_content: backContent
       }
     });
 
@@ -59,7 +61,7 @@ export const PUT = async (req: Request) => {
   }
 
   try {
-    const { flashcardId, chapterId } = await req.json();
+    const { flashcardId, chapterId, frontContent, backContent } = await req.json();
     await prisma.flashCard.update({
       where: {
         id: flashcardId,
@@ -73,6 +75,8 @@ export const PUT = async (req: Request) => {
       },
       data: {
         chapter_id: chapterId,
+        front_content: frontContent,
+        back_content: backContent
       }
     });
 

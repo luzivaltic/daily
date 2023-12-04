@@ -61,7 +61,7 @@ export const PUT = async (req: Request) => {
   }
 
   try {
-    const { flashcardId, chapterId, frontContent, backContent } = await req.json();
+    const { flashcardId, frontContent, backContent } = await req.json();
     await prisma.flashCard.update({
       where: {
         id: flashcardId,
@@ -74,7 +74,6 @@ export const PUT = async (req: Request) => {
         }
       },
       data: {
-        chapter_id: chapterId,
         front_content: frontContent,
         back_content: backContent
       }

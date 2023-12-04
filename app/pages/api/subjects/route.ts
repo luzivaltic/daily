@@ -63,7 +63,7 @@ export const PUT = async (req: Request) => {
   }
 
   try {
-    const { subjectId, learningId, title } = await req.json();
+    const { subjectId, title } = await req.json();
     await prisma.subject.update({
       where: {
         id: subjectId,
@@ -72,7 +72,6 @@ export const PUT = async (req: Request) => {
         }
       },
       data: {
-        learning_id: learningId,
         title: title
       }
     });

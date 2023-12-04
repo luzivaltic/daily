@@ -1,6 +1,5 @@
 "use client";
 import "./page.css";
-import { CookiesProvider, useCookies } from "next-client-cookies";
 import ButtonAppBar from "./components/ButtonAppBar";
 import { SideNavBar } from "./components/SideNavBar";
 import { MainMenu } from "./components/MainMenu";
@@ -9,12 +8,12 @@ import { useEffect, useState } from "react";
 
 const Home = () => {
   const router = useRouter();
-  const cookies = useCookies();
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    const cookie = cookies.get('access_token');
-    const valid = cookie !== undefined;
+    const token = window.sessionStorage.getItem('access_token');
+    console.log(token);
+    const valid = token !== null;
     setIsAuthorized(valid);
 
     if (!valid) {
@@ -24,7 +23,7 @@ const Home = () => {
   
   if (isAuthorized) {
     return (
-      <CookiesProvider value={[]}>
+      <>
         <header>
           <ButtonAppBar />
         </header>
@@ -32,10 +31,14 @@ const Home = () => {
           <SideNavBar />
           <MainMenu />
         </div>    
-      </CookiesProvider>
+      </>
     )
   } else {
-    return null;
+    return (
+      <div>
+        Hello
+      </div>
+    )
   }
 };
 

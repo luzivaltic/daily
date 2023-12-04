@@ -10,7 +10,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { ChapterList } from "./ChapterList";
 import axios, { HeadersDefaults } from "axios";
 import { BASE_URL } from "../env";
-import { useCookies } from "next-client-cookies";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
 type Subject = {
@@ -29,12 +28,11 @@ interface CommonHeaderProperties extends HeadersDefaults {
 }
 
 export const SideNavBar = () => {
-  const cookies = useCookies();
   const [listSubject, setListSubject] = useState<Subject[]>([]);
   const [listChapter, setListChapter] = useState<Chapter[]>([]);
   const [chosenSubject, setChosenSubject] = useState(10000);
 
-  axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.get(
+  axios.defaults.headers.common["Authorization"] = `Bearer ${window.sessionStorage.getItem(
     "access_token"
   )}`;
 

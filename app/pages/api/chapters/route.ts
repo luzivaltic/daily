@@ -65,7 +65,7 @@ export const PUT = async (req: Request) => {
   }
 
   try {
-    const { chapterId, subjectId } = await req.json();
+    const { chapterId } = await req.json();
     await prisma.chapter.update({
       where: {
         id: chapterId,
@@ -76,7 +76,7 @@ export const PUT = async (req: Request) => {
         }
       },
       data: {
-        subject_id: subjectId,
+        
       }
     });
 

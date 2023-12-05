@@ -70,8 +70,6 @@ export const PUT = async (req: Request) => {
     const {
       blockId,
       contentTypeId, 
-      frontFlashcardId, 
-      backFlashcardId,
       contentText,
       contentImageUrl,
     } = await req.json();
@@ -82,8 +80,6 @@ export const PUT = async (req: Request) => {
       },
       data: {
         content_type_id: contentTypeId,
-        front_flashcard_id: frontFlashcardId,
-        back_flashcard_id: backFlashcardId,
         content_text: contentText,
         content_image_url: contentImageUrl
       }

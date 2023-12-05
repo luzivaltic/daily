@@ -8,12 +8,10 @@ import EmailTextField from "../EmailTextField";
 import PasswordTextField from "../PasswordTextField";
 import SubmitButton from "../SubmitButton";
 import assert from "assert";
-import { useCookies } from 'next-client-cookies';
 import { BASE_URL, JWT_EXPIRE } from "@/app/env";
 
 export const LoginForm = () => {
   const router = useRouter();
-  const cookies = useCookies();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -31,14 +29,8 @@ export const LoginForm = () => {
     const responseData = await response.json();
 
     assert(response.status === 200);
-    cookies.set(
-      'access_token', 
-      responseData.access_token, 
-      { 
-        secure: true,
-        expires: new Date(Date.now() + parseInt(JWT_EXPIRE) * 1000)
-      }
-    );
+    window.sessionStorage.setItem('access_token', responseData.access_token);
+
     // redirect to main page
     router.push('/');
   };
@@ -68,7 +60,7 @@ export const LoginForm = () => {
           
           <Grid container>
             <Grid item>
-              Don't have an account ?
+              Dont have an account ?
               <Link href="/pages/auth/signup" style={{ textDecoration: 'none' }}>
                 {" Sign Up"}
               </Link>

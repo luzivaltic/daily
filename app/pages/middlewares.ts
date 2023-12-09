@@ -1,7 +1,3 @@
-import nextConnect from 'next-connect';
-import { headers } from 'next/headers';
-import { NextResponse } from 'next/server';
-import { JWT_SECRET } from '../env';
 import jwt from 'jsonwebtoken';
 
 const requireAuth = async (header: any) => {

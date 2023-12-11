@@ -1,18 +1,18 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { EdgeStoreProvider } from '@/lib/edgestore'
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Daily',
-  description: 'Flashcard',
-}
+  title: "Daily",
+  description: "Flashcard",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -20,5 +20,5 @@ export default function RootLayout({
         <EdgeStoreProvider>{children}</EdgeStoreProvider>
       </body>
     </html>
-  )
+  );
 }

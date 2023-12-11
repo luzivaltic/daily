@@ -1,4 +1,5 @@
-import { Button, List } from "@mui/material";
+"use client";
+import { Button, Input, List, Menu, MenuItem, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { IconWrapper } from "./IconWrapper";
@@ -10,6 +11,7 @@ import { ChapterList } from "./ChapterList";
 import axios from "axios";
 import { BASE_URL } from "../env";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import Edit from "@mui/icons-material/Edit";
 
 type Subject = {
   id: string;
@@ -22,15 +24,26 @@ type Chapter = {
   subject_id: string;
 };
 
-
 export const SideNavBar = () => {
   const [listSubject, setListSubject] = useState<Subject[]>([]);
   const [listChapter, setListChapter] = useState<Chapter[]>([]);
   const [chosenSubject, setChosenSubject] = useState(10000);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   axios.defaults.headers.common["Authorization"] = `Bearer ${window.sessionStorage.getItem(
     "access_token"
   )}`;
+
+  const handleClickMoreOptions = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMoreOptions = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(null);
+  };
 
   const handleClickSubject = (index: number) => {
     if (chosenSubject == index) {
@@ -38,6 +51,17 @@ export const SideNavBar = () => {
     } else {
       setChosenSubject(index);
     }
+  };
+
+  const handleChangeSubject = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    subjectIndex: number
+  ) => {
+    event.stopPropagation();
+    return axios.put(`${BASE_URL}/pages/api/subjects`, {
+      subjectId: listSubject[subjectIndex].id,
+      title: event.currentTarget.value,
+    });
   };
 
   const getListSubject = async () => {
@@ -125,10 +149,10 @@ export const SideNavBar = () => {
           return (
             <>
               <NavListItemButton
-                key={subjectIndex}
+                key={subject.id}
                 onClick={() => handleClickSubject(subjectIndex)}
               >
-                <NavBarBoxItem key={subjectIndex}>
+                <NavBarBoxItem key={`${subject.id}-item`}>
                   <IconWrapper>
                     {subjectIndex == chosenSubject ? (
                       <ExpandMore />
@@ -145,34 +169,60 @@ export const SideNavBar = () => {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    {" "}
-                    {subject.title}{" "}
+                    <Input
+                      value={subject.title}
+                      disableUnderline={true}
+                      onChange={(e) => handleChangeSubject(e, subjectIndex)}
+                    />
                   </span>
-                  <Button
-                    sx={{
-                      margin: 0,
-                      padding: 0,
-                      minWidth: "unset",
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <IconWrapper bgcolor="transparent">
-                      <MoreHorizIcon />
-                    </IconWrapper>
-                  </Button>
+                  <Tooltip title="More options">
+                    <Button
+                      sx={{
+                        margin: 0,
+                        padding: 0,
+                        minWidth: "unset",
+                      }}
+                      onClick={handleClickMoreOptions}
+                    >
+                      <IconWrapper bgcolor="transparent">
+                        <MoreHorizIcon />
+                      </IconWrapper>
+                    </Button>
+                  </Tooltip>
 
-                  <Button
-                    sx={{
-                      margin: 0,
-                      padding: 0,
-                      minWidth: "unset",
-                    }}
-                    onClick={(e) => createNewChapter(e, subjectIndex)}
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleCloseMoreOptions}
                   >
-                    <IconWrapper bgcolor="transparent">
-                      <AddIcon />
-                    </IconWrapper>
-                  </Button>
+                    <MenuItem
+                      disableRipple
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Edit /> Delete
+                    </MenuItem>
+                    <MenuItem onClick={(e) => e.stopPropagation()}>
+                      something
+                    </MenuItem>
+                    <MenuItem onClick={(e) => e.stopPropagation()}>
+                      something
+                    </MenuItem>
+                  </Menu>
+
+                  <Tooltip title="New chapter">
+                    <Button
+                      sx={{
+                        margin: 0,
+                        padding: 0,
+                        minWidth: "unset",
+                      }}
+                      onClick={(e) => createNewChapter(e, subjectIndex)}
+                    >
+                      <IconWrapper bgcolor="transparent">
+                        <AddIcon />
+                      </IconWrapper>
+                    </Button>
+                  </Tooltip>
                 </NavBarBoxItem>
               </NavListItemButton>
 

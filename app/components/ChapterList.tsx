@@ -3,11 +3,11 @@ import { NavListItemButton } from "./NavListItemButton";
 import { NavBarBoxItem } from "./NavBarBoxItem";
 import { IconWrapper } from "./IconWrapper";
 import ArticleIcon from "@mui/icons-material/Article";
-
+import { useRootContext } from "../Context";
 
 type ChapterListProps = {
-  subjectIndex: Number;
-  chosenSubject: Number;
+  subjectIndex: number;
+  chosenSubject: number;
   listChapter: Array<any>;
 };
 
@@ -16,7 +16,8 @@ export const ChapterList = ({
   chosenSubject,
   listChapter,
 }: ChapterListProps) => {
-    return (
+  const RootContext = useRootContext();
+  return (
     <Collapse in={subjectIndex == chosenSubject} timeout="auto" unmountOnExit>
       {listChapter.map((chapter) => {
         return (
@@ -25,6 +26,7 @@ export const ChapterList = ({
               marginLeft: "20px",
             }}
             key={chapter.id}
+            onClick={() => RootContext?.setChapterId(chapter.id)}
           >
             <NavBarBoxItem>
               <IconWrapper>

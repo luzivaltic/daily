@@ -1,5 +1,4 @@
 import { Editor } from "./Editor";
-import "../styles/FlashCard.css";
 import { useRootContext } from "../Context";
 
 interface FlashCardProps {

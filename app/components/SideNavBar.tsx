@@ -31,9 +31,9 @@ export const SideNavBar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  axios.defaults.headers.common["Authorization"] = `Bearer ${window.sessionStorage.getItem(
-    "access_token"
-  )}`;
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${window.sessionStorage.getItem("access_token")}`;
 
   const handleClickMoreOptions = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -170,7 +170,7 @@ export const SideNavBar = () => {
                     }}
                   >
                     <Input
-                      value={subject.title}
+                      defaultValue={subject.title}
                       disableUnderline={true}
                       onChange={(e) => handleChangeSubject(e, subjectIndex)}
                     />

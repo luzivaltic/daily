@@ -1,7 +1,6 @@
 import { createUser } from "../users/api";
-import { UserSignupInfo } from "../type";
+import { UserSignupInfo, prisma } from "../type";
 import { NextResponse } from "next/server";
-import { prisma } from "../type";
 
 export const POST = async (req: Request) => {
   const { username, email, password, passwordConfirm } = await req.json();

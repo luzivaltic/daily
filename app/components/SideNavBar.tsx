@@ -7,7 +7,7 @@ import { NavListItemButton } from "./NavListItemButton";
 import React, { useEffect, useState } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { ChapterList } from "./ChapterList";
-import axios, { HeadersDefaults } from "axios";
+import axios from "axios";
 import { BASE_URL } from "../env";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 

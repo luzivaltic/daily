@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import requireAuth from "@/app/pages/middlewares";
-import { BlockCreateInterface } from "../type";
-import { prisma } from "../type";
+import { BlockCreateInterface, prisma } from "../type";
 
 export const GET = async (req: Request) => {
   const header = req.headers;

@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { User } from "@prisma/client";
-import { UserSignupInfo, UserUpdateInfo } from "../type";
+import { UserSignupInfo, UserUpdateInfo, prisma } from "../type";
 import bcrypt from 'bcrypt';
-import { prisma } from "../type";
 
 
 export const createUser = async (userSignupInfo: UserSignupInfo) => {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { deleteUserById } from "./api";
 import { updateUser } from "./api";
-import { UserUpdateInfo } from "../signup/types";
+import { UserUpdateInfo } from "../type";
 import requireAuth from "../../middlewares";
 
 // modify user info

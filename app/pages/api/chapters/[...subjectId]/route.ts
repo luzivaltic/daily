@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import requireAuth from "@/app/pages/middlewares";
-
-const prisma = new PrismaClient();
+import { prisma } from "../../type";
 
 export const GET = async (req: Request, { params }: { params: { subjectId: string } }) => {
   const header = req.headers;

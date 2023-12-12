@@ -1,9 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { createUser } from "../users/api";
-import { UserSignupInfo } from "./types";
+import { UserSignupInfo, prisma } from "../type";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 export const POST = async (req: Request) => {
   const { username, email, password, passwordConfirm } = await req.json();

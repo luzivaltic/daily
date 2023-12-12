@@ -1,14 +1,13 @@
-import { Box, Button, Collapse, List } from "@mui/material";
+import { Button, List } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { IconWrapper } from "./IconWrapper";
 import { NavBarBoxItem } from "./NavBarBoxItem";
 import { NavListItemButton } from "./NavListItemButton";
 import React, { useEffect, useState } from "react";
-import ExpandLess from "@mui/icons-material/ExpandLess";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { ChapterList } from "./ChapterList";
-import axios, { HeadersDefaults } from "axios";
+import axios from "axios";
 import { BASE_URL } from "../env";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
@@ -23,9 +22,6 @@ type Chapter = {
   subject_id: string;
 };
 
-interface CommonHeaderProperties extends HeadersDefaults {
-  Authorization: string;
-}
 
 export const SideNavBar = () => {
   const [listSubject, setListSubject] = useState<Subject[]>([]);

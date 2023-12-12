@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { PrismaClient, User } from "@prisma/client";
-import { UserSignupInfo, UserUpdateInfo } from "../signup/types";
+import { User } from "@prisma/client";
+import { UserSignupInfo, UserUpdateInfo, prisma } from "../type";
 import bcrypt from 'bcrypt';
 
-const prisma = new PrismaClient();
 
 export const createUser = async (userSignupInfo: UserSignupInfo) => {
   const { username, email, password, passwordConfirm } = userSignupInfo;

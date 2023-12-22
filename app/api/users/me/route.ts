@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getUserById } from "../api";
-import requireAuth from "@/app/pages/middlewares";
+import requireAuth from "@/app/api/middlewares";
 
 // GET user
 export const GET = async (req: Request) => {

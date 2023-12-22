@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import requireAuth from "@/app/pages/middlewares";
+import requireAuth from "@/app/api/middlewares";
 import { prisma } from "../../type";
 
 export const GET = async (req: Request, { params }: { params: { chapterId: string } }) => {

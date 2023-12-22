@@ -9,6 +9,9 @@
     "lint": "next lint",
     "seed": "ts-node prisma/seed.ts"
   },
+  "dependencies": {
+    "next": "13.5.4"
+  },
   "devDependencies": {
     "@prisma/client": "^5.4.2",
     "@types/bcrypt": "^5.0.1",

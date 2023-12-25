@@ -10,7 +10,7 @@ export const GET = async (req: Request) => {
     return NextResponse.json({ error: "Unauthorized!" }, { status: 401 });
   }
 
-  const flashcards = prisma.flashCard.findMany({
+  const flashcards = await prisma.flashCard.findMany({
     where: {
       chapter: {
         subject: {

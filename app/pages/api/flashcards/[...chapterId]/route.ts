@@ -10,9 +10,9 @@ export const GET = async (req: Request, { params }: { params: { chapterId: strin
     return NextResponse.json({ error: "Unauthorized!" }, { status: 401 });
   }
 
-  const chapterId: string = params.chapterId;
+  const chapterId: string = params.chapterId.toString();
 
-  const flashcards = prisma.flashCard.findMany({
+  const flashcards = await prisma.flashCard.findMany({
     where: {
       chapter: {
         id: chapterId,

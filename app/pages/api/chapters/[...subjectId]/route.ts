@@ -10,7 +10,7 @@ export const GET = async (req: Request, { params }: { params: { subjectId: strin
     return NextResponse.json({ error: "Unauthorized!" }, { status: 401 });
   }
   
-  const subjectId: string = params.subjectId[0];
+  const subjectId: string = params.subjectId.toString();
 
   const chapters = await prisma.chapter.findMany({
     where: {

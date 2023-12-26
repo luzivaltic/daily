@@ -90,7 +90,6 @@ export const DELETE = async (req: Request) => {
   if (!isAuthorized || !userId) {
     return NextResponse.json({ error: "Unauthorized!" }, { status: 401 });
   }
-
   const { flashcardId } = await req.json();
   try {
     await prisma.flashCard.delete({

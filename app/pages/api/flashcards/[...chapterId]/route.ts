@@ -12,7 +12,7 @@ export const GET = async (req: Request, { params }: { params: { chapterId: strin
 
   const chapterId: string = params.chapterId;
 
-  const flashcards = prisma.flashCard.findMany({
+  const flashcards = await prisma.flashCard.findMany({
     where: {
       chapter: {
         id: chapterId,

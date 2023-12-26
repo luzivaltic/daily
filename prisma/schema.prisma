@@ -45,8 +45,8 @@ model FlashCard {
   id            String  @id @default(cuid())
   chapter       Chapter @relation(fields: [chapter_id], references: [id], onDelete: Cascade)
   chapter_id    String
-  front_content String?
-  back_content  String?
+  front_content String? @db.LongText
+  back_content  String? @db.LongText
   front_blocks  Block[] @relation("FrontBlocks")
   back_blocks   Block[] @relation("BackBlocks")
 }

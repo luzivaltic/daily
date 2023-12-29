@@ -18,7 +18,5 @@ export const GET = async (req: Request, { params }: { params: { id: string } }) 
     },
   });
 
-  console.log(flashcard?.id);
-
   return NextResponse.json({ flashcard: flashcard });
 };

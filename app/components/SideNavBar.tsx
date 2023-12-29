@@ -1,17 +1,17 @@
 "use client";
-import { Button, Input, List, Menu, MenuItem, Tooltip } from "@mui/material";
+import { Button, Input, List, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { IconWrapper } from "./IconWrapper";
 import { NavBarBoxItem } from "./NavBarBoxItem";
 import { NavListItemButton } from "./NavListItemButton";
 import React, { useEffect, useState } from "react";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { ChapterList } from "./ChapterList";
 import axios from "axios";
 import { BASE_URL } from "../env";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import Edit from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useRootContext } from "../Context";
 
 type Subject = {
   id: string;
@@ -27,30 +27,33 @@ type Chapter = {
 export const SideNavBar = () => {
   const [listSubject, setListSubject] = useState<Subject[]>([]);
   const [listChapter, setListChapter] = useState<Chapter[]>([]);
-  const [chosenSubject, setChosenSubject] = useState(10000);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [chosenSubject, setChosenSubject] = useState(-1);
+  const RootContext = useRootContext();
 
   axios.defaults.headers.common[
     "Authorization"
   ] = `Bearer ${window.sessionStorage.getItem("access_token")}`;
 
-  const handleClickMoreOptions = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMoreOptions = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-    setAnchorEl(null);
-  };
-
   const handleClickSubject = (index: number) => {
-    if (chosenSubject == index) {
-      setChosenSubject(10000);
-    } else {
+    if (chosenSubject != index) {
       setChosenSubject(index);
     }
+  };
+
+  const handleDeleteSubject = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number
+  ) => {
+    if (index == chosenSubject) {
+      setChosenSubject(-1);
+    }
+    return axios
+      .delete(`${BASE_URL}/pages/api/subjects`, {
+        data: {
+          subjectId: listSubject[index]?.id,
+        },
+      })
+      .then(() => updateStateListSubject());
   };
 
   const handleChangeSubject = (
@@ -77,9 +80,9 @@ export const SideNavBar = () => {
   const createNewSubject = async () => {
     const learning = await getLearning();
 
-    return await axios
+    return axios
       .post(`${BASE_URL}/pages/api/subjects`, {
-        learningId: learning.id,
+        learningId: learning?.id,
         title: "Untitled",
       })
       .then((subject) => console.log("successfully created subject: ", subject))
@@ -99,12 +102,36 @@ export const SideNavBar = () => {
     subjectIndex: number
   ) => {
     e.stopPropagation();
-    return await axios
+    return axios
       .post(`${BASE_URL}/pages/api/chapters`, {
-        subjectId: listSubject[subjectIndex].id,
+        subjectId: listSubject[subjectIndex]?.id,
         title: "Untitled",
       })
       .then(() => updateStateListChapter());
+  };
+
+  const handleDeleteChapter = (chapterId: string) => {
+    if (chapterId == RootContext?.chapterId) {
+      RootContext?.setChapterId("");
+    }
+    axios
+      .delete(`${BASE_URL}/pages/api/chapters`, {
+        data: {
+          chapterId: chapterId,
+        },
+      })
+      .then(() => updateStateListChapter());
+  };
+
+  const handleChangeChapter = (chapterId: string, title: string) => {
+    axios.put(`${BASE_URL}/pages/api/chapters`, {
+      chapterId: chapterId,
+      title: title,
+    });
+  };
+
+  const handleClickChapter = (chapterId: string) => {
+    RootContext?.setChapterId(chapterId);
   };
 
   const updateStateListSubject = async () => {
@@ -115,7 +142,7 @@ export const SideNavBar = () => {
   const updateStateListChapter = async () => {
     if (chosenSubject != 10000) {
       const newListChapter = await getListChapter(
-        listSubject[chosenSubject].id
+        listSubject[chosenSubject]?.id
       );
       setListChapter(newListChapter);
     }
@@ -144,6 +171,7 @@ export const SideNavBar = () => {
           maxHeight: "70vh",
           overflow: "auto",
         }}
+        key="List side nav bar"
       >
         {listSubject.map((subject: Subject, subjectIndex) => {
           return (
@@ -160,6 +188,7 @@ export const SideNavBar = () => {
                       <LocalLibraryIcon />
                     )}
                   </IconWrapper>
+
                   <span
                     style={{
                       marginLeft: "10px",
@@ -175,39 +204,21 @@ export const SideNavBar = () => {
                       onChange={(e) => handleChangeSubject(e, subjectIndex)}
                     />
                   </span>
-                  <Tooltip title="More options">
+
+                  <Tooltip title="Delete subject">
                     <Button
                       sx={{
                         margin: 0,
                         padding: 0,
                         minWidth: "unset",
                       }}
-                      onClick={handleClickMoreOptions}
+                      onClick={(e) => handleDeleteSubject(e, subjectIndex)}
                     >
                       <IconWrapper bgcolor="transparent">
-                        <MoreHorizIcon />
+                        <DeleteIcon />
                       </IconWrapper>
                     </Button>
                   </Tooltip>
-
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleCloseMoreOptions}
-                  >
-                    <MenuItem
-                      disableRipple
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Edit /> Delete
-                    </MenuItem>
-                    <MenuItem onClick={(e) => e.stopPropagation()}>
-                      something
-                    </MenuItem>
-                    <MenuItem onClick={(e) => e.stopPropagation()}>
-                      something
-                    </MenuItem>
-                  </Menu>
 
                   <Tooltip title="New chapter">
                     <Button
@@ -230,6 +241,9 @@ export const SideNavBar = () => {
                 subjectIndex={subjectIndex}
                 chosenSubject={chosenSubject}
                 listChapter={listChapter}
+                handleDeleteChapter={handleDeleteChapter}
+                handleClickChapter={handleClickChapter}
+                handleChangeChapter={handleChangeChapter}
               />
             </>
           );

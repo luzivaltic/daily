@@ -6,33 +6,37 @@ import { Button, Divider, Tooltip } from "@mui/material";
 import { IconWrapper } from "./IconWrapper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useEffect, useState } from "react";
+import { BaseFlashCardProps } from "../page";
 
 interface FlashCardProps {
-  indexNumber: number;
-  initialContent?: string;
-  id: string;
+  flashcardData: BaseFlashCardProps;
   onDelete: (id: string) => Promise<void>;
   style?: React.CSSProperties;
   chooseFlashcard: (id: string) => void;
+  updateFlashcards: () => void;
   edit: boolean;
+  editing: boolean;
 }
 
 export const FlashCard = ({
-  initialContent,
-  indexNumber,
-  id,
   onDelete,
   style,
   chooseFlashcard,
   edit,
+  flashcardData,
+  updateFlashcards,
+  editing,
 }: FlashCardProps) => {
   const [enter, setEnter] = useState(false);
+  const [focus, setFocus] = useState(false);
+  const [flipped, setFlipped] = useState(false);
+  const RootContext = useRootContext();
 
   const onChange = async (content: string) => {
-    await axios.put(`${BASE_URL}/pages/api/flashcards`, {
-      flashcardId: id,
-      frontContent: content,
-      backContent: "",
+    axios.put(`${BASE_URL}/pages/api/flashcards`, {
+      flashcardId: flashcardData.id,
+      frontContent: flipped ? flashcardData.front_content : content,
+      backContent: flipped ? content : flashcardData.back_content,
     });
   };
 
@@ -43,11 +47,11 @@ export const FlashCard = ({
     borderRadius: "8px",
     overflowY: "auto",
     filter: "drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25))",
+    display: "flex",
+    flexDirection: "column",
   };
 
   const mergedFlashcardStyle = { ...defaultStyles, ...style };
-
-  useEffect(() => {}, [initialContent]);
 
   return (
     <div
@@ -55,7 +59,9 @@ export const FlashCard = ({
       style={mergedFlashcardStyle}
       onMouseEnter={() => setEnter(true)}
       onMouseLeave={() => setEnter(false)}
-      onFocus={() => chooseFlashcard(id)}
+      onFocus={() => {
+        chooseFlashcard(flashcardData.id);
+      }}
     >
       <header
         style={{
@@ -73,8 +79,7 @@ export const FlashCard = ({
             fontSize: "16px",
           }}
         >
-          {" "}
-          Front{" "}
+          {flipped ? "Back" : "Front"}
         </span>
 
         <div
@@ -90,7 +95,7 @@ export const FlashCard = ({
                 padding: 0,
                 minWidth: "unset",
               }}
-              onClick={() => onDelete(id)}
+              onClick={() => onDelete(flashcardData.id)}
             >
               <IconWrapper>
                 <DeleteIcon />
@@ -109,9 +114,34 @@ export const FlashCard = ({
 
       <Editor
         onChange={onChange}
-        initialContent={initialContent}
+        initialContent={
+          flipped ? flashcardData.back_content : flashcardData.front_content
+        }
         editable={edit}
       />
+
+      <footer
+        style={{
+          display: "flex",
+          flexGrow: 1,
+          alignItems: "center",
+          justifyContent: "space-evenly",
+        }}
+      >
+        {editing && (
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setFlipped(!flipped);
+              updateFlashcards();
+            }}
+          >
+            {" "}
+            Flip{" "}
+          </Button>
+        )}
+        {focus && <Button variant="outlined"> Flip </Button>}
+      </footer>
     </div>
   );
 };

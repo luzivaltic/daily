@@ -52,7 +52,7 @@ export const ChapterList = ({
                   defaultValue={chapter.title}
                   disableUnderline={true}
                   onChange={(e) =>
-                    handleChangeChapter(chapter.id, chapter.title)
+                    handleChangeChapter(chapter.id, e.currentTarget.value)
                   }
                 />
               </span>

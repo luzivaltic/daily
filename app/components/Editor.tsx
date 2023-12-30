@@ -29,9 +29,9 @@ export const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   return (
     <div
       style={{
-        overflow: "hidden",
+        overflow: "auto",
         width: "100%",
-        maxHeight: "90%",
+        height: "80%",
       }}
     >
       <BlockNoteView editor={editor} theme={"light"} />

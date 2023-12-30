@@ -6,17 +6,18 @@ import { useRootContext } from "../Context";
 interface DialogProps {
   children: ReactNode;
   chooseFlashcard: (id: string) => void;
-  changeContent: () => void;
+  // changeContent: () => void;
   updateFlashcards: () => void;
 }
 
 export const FlashcardDialog = ({
   children,
   chooseFlashcard,
-  changeContent,
+  // changeContent,
   updateFlashcards,
 }: DialogProps) => {
   const [open, setOpen] = useState(true);
+  const [reloadContent, setReloadContent] = useState(false);
 
   return (
     <Dialog

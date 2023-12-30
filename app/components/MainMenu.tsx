@@ -3,23 +3,22 @@ import { FlashCard } from "./FlashCard";
 import { useRootContext } from "../Context";
 import axios from "axios";
 import { BASE_URL } from "../env";
-import { FlashCardProps } from "../page";
+import { BaseFlashCardProps } from "../page";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import QuizIcon from "@mui/icons-material/Quiz";
 import { IconWrapper } from "./IconWrapper";
 import { Button, Tooltip } from "@mui/material";
-import IndeterminateCheckbox from "./IndeterminateCheckbox";
 import { FlashcardDialog } from "./FlashcardDialog";
 
 export const MainMenu = () => {
-  const [flashCards, setFlashcards] = useState<FlashCardProps[]>([]);
+  const [flashCards, setFlashcards] = useState<BaseFlashCardProps[]>([]);
   const [selectedFlashcard, setSelectedFlashcard] = useState("");
   const [edit, setEdit] = useState(false);
   const RootContext = useRootContext();
 
   const getFlashcards = async () => {
     if (RootContext?.chapterId != "") {
-      const flashcards: FlashCardProps[] = await axios
+      const flashcards: BaseFlashCardProps[] = await axios
         .get(`${BASE_URL}/pages/api/flashcards/${RootContext?.chapterId}`)
         .then((res) => res.data.flashcards);
       return flashcards;
@@ -48,7 +47,7 @@ export const MainMenu = () => {
   };
 
   const updateFlashcards = async () => {
-    await getFlashcards()
+    getFlashcards()
       .then((res) => setFlashcards(res))
       .then(() => changeContent());
   };
@@ -68,8 +67,6 @@ export const MainMenu = () => {
         padding: "20px",
       }}
     >
-      <IndeterminateCheckbox />
-
       <div
         className="function-bar"
         style={{
@@ -117,6 +114,7 @@ export const MainMenu = () => {
                 padding: 0,
                 minWidth: "unset",
               }}
+              onClick={() => RootContext?.setReadyTest(true)}
             >
               <IconWrapper>
                 <QuizIcon />
@@ -142,17 +140,16 @@ export const MainMenu = () => {
                 <FlashcardDialog
                   key={`${flashCard.id}-dialog`}
                   chooseFlashcard={setSelectedFlashcard}
-                  changeContent={changeContent}
                   updateFlashcards={updateFlashcards}
                 >
                   <FlashCard
-                    initialContent={flashCard.front_content}
-                    indexNumber={index}
+                    flashcardData={flashCard}
                     key={flashCard.id}
-                    id={flashCard.id}
                     onDelete={deleteFlashcard}
                     chooseFlashcard={setSelectedFlashcard}
                     edit={edit}
+                    updateFlashcards={updateFlashcards}
+                    editing={true}
                     style={{
                       width: "500px",
                       height: "700px",
@@ -164,13 +161,13 @@ export const MainMenu = () => {
 
             return (
               <FlashCard
-                initialContent={flashCard.front_content}
-                indexNumber={index}
-                key={flashCard.id}
-                id={flashCard.id}
+                flashcardData={flashCard}
+                key={`${flashCard.id}-flashcard`}
                 onDelete={deleteFlashcard}
                 chooseFlashcard={setSelectedFlashcard}
                 edit={edit}
+                updateFlashcards={updateFlashcards}
+                editing={false}
               />
             );
           })}

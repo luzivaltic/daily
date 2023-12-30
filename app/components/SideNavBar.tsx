@@ -13,12 +13,12 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useRootContext } from "../Context";
 
-type Subject = {
+export type Subject = {
   id: string;
   title: string;
 };
 
-type Chapter = {
+export type Chapter = {
   id: string;
   title: string;
   subject_id: string;
@@ -171,7 +171,7 @@ export const SideNavBar = () => {
           maxHeight: "70vh",
           overflow: "auto",
         }}
-        key="List side nav bar"
+        // key="List side nav bar"
       >
         {listSubject.map((subject: Subject, subjectIndex) => {
           return (

@@ -7,9 +7,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { context } from "./Context";
 import axios from "axios";
-import { BASE_URL } from "./env";
+import { ReadyTestMenu } from "./components/ReadyTestMenu";
+import { SideNavBarTest } from "./components/SideNavBarTest";
 
-export type FlashCardProps = {
+export type BaseFlashCardProps = {
   id: string;
   front_content: string;
   back_content: string;
@@ -19,6 +20,7 @@ const Home = () => {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [chapterId, setChapterId] = useState("");
+  const [readyTest, setReadyTest] = useState(true);
 
   axios.defaults.headers.common[
     "Authorization"
@@ -39,13 +41,23 @@ const Home = () => {
   if (isAuthorized) {
     return (
       <>
-        <context.Provider value={{ chapterId, setChapterId }}>
+        <context.Provider
+          value={{
+            chapterId: chapterId,
+            setChapterId: setChapterId,
+            readyTest: readyTest,
+            setReadyTest: setReadyTest,
+          }}
+        >
           <header>
             <ButtonAppBar />
           </header>
           <div className="container">
-            <SideNavBar />
-            <MainMenu />
+            {!readyTest && <SideNavBar />}
+            {readyTest && <SideNavBarTest />}
+
+            {!readyTest && <MainMenu />}
+            {readyTest && <ReadyTestMenu />}
           </div>
         </context.Provider>
       </>

@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: "build",
   env: {
     JWT_EXPIRE: process.env.JWT_EXPIRE,
     JWT_SECRET: process.env.JWT_SECRET,

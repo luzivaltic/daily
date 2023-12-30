@@ -51,7 +51,7 @@ export const SideNavBar = () => {
       setChosenSubject(-1);
     }
     return axios
-      .delete(`${BASE_URL}/pages/api/subjects`, {
+      .delete(`${BASE_URL}/api/subjects`, {
         data: {
           subjectId: listSubject[index]?.id,
         },
@@ -64,19 +64,19 @@ export const SideNavBar = () => {
     subjectIndex: number
   ) => {
     event.stopPropagation();
-    return axios.put(`${BASE_URL}/pages/api/subjects`, {
+    return axios.put(`${BASE_URL}/api/subjects`, {
       subjectId: listSubject[subjectIndex].id,
       title: event.currentTarget.value,
     });
   };
 
   const getListSubject = async () => {
-    const listSubject = await axios.get(`${BASE_URL}/pages/api/subjects`);
+    const listSubject = await axios.get(`${BASE_URL}/api/subjects`);
     return listSubject.data.subjects;
   };
 
   const getLearning = async () => {
-    const leanring = await axios.get(`${BASE_URL}/pages/api/learning`);
+    const leanring = await axios.get(`${BASE_URL}/api/learning`);
     return leanring.data.learning;
   };
 
@@ -84,7 +84,7 @@ export const SideNavBar = () => {
     const learning = await getLearning();
 
     return axios
-      .post(`${BASE_URL}/pages/api/subjects`, {
+      .post(`${BASE_URL}/api/subjects`, {
         learningId: learning?.id,
         title: "Untitled",
       })
@@ -95,7 +95,7 @@ export const SideNavBar = () => {
 
   const getListChapter = async (subjectId: string) => {
     const listChapter = await axios.get(
-      `${BASE_URL}/pages/api/chapters/${subjectId}`
+      `${BASE_URL}/api/chapters/${subjectId}`
     );
     return listChapter.data.chapters;
   };
@@ -106,7 +106,7 @@ export const SideNavBar = () => {
   ) => {
     e.stopPropagation();
     return axios
-      .post(`${BASE_URL}/pages/api/chapters`, {
+      .post(`${BASE_URL}/api/chapters`, {
         subjectId: listSubject[subjectIndex]?.id,
         title: "Untitled",
       })
@@ -118,7 +118,7 @@ export const SideNavBar = () => {
       RootContext?.setChapterId("");
     }
     axios
-      .delete(`${BASE_URL}/pages/api/chapters`, {
+      .delete(`${BASE_URL}/api/chapters`, {
         data: {
           chapterId: chapterId,
         },
@@ -127,7 +127,7 @@ export const SideNavBar = () => {
   };
 
   const handleChangeChapter = (chapterId: string, title: string) => {
-    axios.put(`${BASE_URL}/pages/api/chapters`, {
+    axios.put(`${BASE_URL}/api/chapters`, {
       chapterId: chapterId,
       title: title,
     });

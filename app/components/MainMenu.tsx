@@ -20,7 +20,7 @@ export const MainMenu = () => {
   const getFlashcards = async () => {
     if (RootContext?.chapterId != "") {
       const flashcards: BaseFlashCardProps[] = await axios
-        .get(`${BASE_URL}/pages/api/flashcards/${RootContext?.chapterId}`)
+        .get(`${BASE_URL}/api/flashcards/${RootContext?.chapterId}`)
         .then((res) => res.data.flashcards);
       return flashcards;
     }
@@ -29,7 +29,7 @@ export const MainMenu = () => {
 
   const addFlashcard = async () => {
     axios
-      .post(`${BASE_URL}/pages/api/flashcards`, {
+      .post(`${BASE_URL}/api/flashcards`, {
         chapterId: RootContext?.chapterId,
         frontContent: "",
         backContent: "",
@@ -39,7 +39,7 @@ export const MainMenu = () => {
 
   const deleteFlashcard = async (id: string) => {
     axios
-      .delete(`${BASE_URL}/pages/api/flashcards`, {
+      .delete(`${BASE_URL}/api/flashcards`, {
         data: {
           flashcardId: id,
         },

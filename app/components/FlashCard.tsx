@@ -33,7 +33,7 @@ export const FlashCard = ({
   const RootContext = useRootContext();
 
   const onChange = async (content: string) => {
-    axios.put(`${BASE_URL}/pages/api/flashcards`, {
+    axios.put(`${BASE_URL}/api/flashcards`, {
       flashcardId: flashcardData.id,
       frontContent: flipped ? flashcardData.front_content : content,
       backContent: flipped ? content : flashcardData.back_content,

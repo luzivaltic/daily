@@ -20,10 +20,14 @@ export const LoginForm = () => {
       email: data.get('email'),
       password: data.get('password')
     }
-    const url = BASE_URL + '/pages/api/login';
+    const url = BASE_URL + '/users/signin';
+    const headers = {
+      'Content-Type': 'application/json'
+    }
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(userInfo),
+      headers: headers
     });
   
     const responseData = await response.json();

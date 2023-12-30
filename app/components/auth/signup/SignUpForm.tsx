@@ -26,7 +26,7 @@ const SignUpForm = () => {
       password: data.get('password'),
       passwordConfirm: data.get('passwordConfirm'),
     }
-    const url = BASE_URL + '/pages/api/signup';
+    const url = BASE_URL + '/users/signup';
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(userInfo),

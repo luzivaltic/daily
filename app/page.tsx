@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import "./page.css";
 import ButtonAppBar from "./components/ButtonAppBar";
@@ -22,11 +23,11 @@ const Home = () => {
   const [chapterId, setChapterId] = useState("");
   const [readyTest, setReadyTest] = useState(true);
 
-  axios.defaults.headers.common[
-    "Authorization"
-  ] = `Bearer ${window.sessionStorage.getItem("access_token")}`;
-
   useEffect(() => {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${window.sessionStorage.getItem("access_token")}`;
+  
     const token = window.sessionStorage.getItem("access_token");
     const valid = token !== null;
     setIsAuthorized(valid);

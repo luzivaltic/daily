@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { FlashCard } from "./FlashCard";
 import { useRootContext } from "../Context";

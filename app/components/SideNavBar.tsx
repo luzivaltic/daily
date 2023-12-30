@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { Button, Input, List, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -30,9 +31,11 @@ export const SideNavBar = () => {
   const [chosenSubject, setChosenSubject] = useState(-1);
   const RootContext = useRootContext();
 
-  axios.defaults.headers.common[
-    "Authorization"
-  ] = `Bearer ${window.sessionStorage.getItem("access_token")}`;
+  useEffect(() => {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${window.sessionStorage.getItem("access_token")}`;
+  }, []);
 
   const handleClickSubject = (index: number) => {
     if (chosenSubject != index) {

@@ -27,7 +27,7 @@ export const SideNavBarTesting = ({ flashcards }: TestDataProps) => {
             textTransform: "uppercase",
           }}
         >
-          Test your knowledge duh
+          Test your knowledge
         </p>
       </NavBarBoxItem>
 

@@ -10,6 +10,7 @@ import { context } from "./Context";
 import axios from "axios";
 import { ReadyTestMenu } from "./components/ReadyTestMenu";
 import { SideNavBarTest } from "./components/SideNavBarTest";
+import { NavBar } from "./components/NavBar/NavBar";
 
 export type BaseFlashCardProps = {
   id: string;
@@ -51,7 +52,7 @@ const Home = () => {
           }}
         >
           <header>
-            <ButtonAppBar />
+            <NavBar />
           </header>
           <div className="container">
             {!readyTest && <SideNavBar />}

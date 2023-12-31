@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  distDir: "build",
+  output: "export",
   env: {
     JWT_EXPIRE: process.env.JWT_EXPIRE,
     JWT_SECRET: process.env.JWT_SECRET,

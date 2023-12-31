@@ -30,17 +30,13 @@ export const SideNavBar = () => {
   const [chosenSubject, setChosenSubject] = useState(-1);
   const RootContext = useRootContext();
 
-  axios.defaults.headers.common[
-    "Authorization"
-  ] = `Bearer ${window.sessionStorage.getItem("access_token")}`;
-
   const handleClickSubject = (index: number) => {
     if (chosenSubject != index) {
       setChosenSubject(index);
     }
   };
 
-  const handleDeleteSubject = (
+  const handleDeleteSubject = async (
     event: React.MouseEvent<HTMLElement>,
     index: number
   ) => {
@@ -153,6 +149,10 @@ export const SideNavBar = () => {
   }, [chosenSubject]);
 
   useEffect(() => {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${window.sessionStorage.getItem("access_token")}`;
+
     updateStateListSubject();
   }, []);
 

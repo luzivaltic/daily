@@ -61,12 +61,7 @@ export const MainMenu = () => {
   }, [RootContext?.chapterId]);
 
   return (
-    <div
-      className="main-menu"
-      style={{
-        padding: "20px",
-      }}
-    >
+    <div className="main-menu">
       <div
         className="function-bar"
         style={{

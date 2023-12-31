@@ -4,16 +4,21 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { SubjectsWithChapters } from "./ReadyTestMenu";
 import { FormGroup } from "@mui/material";
+import { Chapter } from "./SideNavBar";
 
 type CheckboxProps = {
   subjectWithChapters: SubjectsWithChapters;
+  updateData: (index: number, data: any) => void;
+  subjectIndex: number;
 };
 
 export default function IndeterminateCheckbox({
   subjectWithChapters,
+  updateData,
+  subjectIndex,
 }: CheckboxProps) {
   const [parentChecked, setParentChecked] = React.useState(false);
-  const [childrenChecked, setChildrenChecked] = React.useState(
+  const [childrenChecked, setChildrenChecked] = React.useState<boolean[]>(
     new Array(subjectWithChapters.chapters.length).fill(false)
   );
 
@@ -23,6 +28,12 @@ export default function IndeterminateCheckbox({
     setChildrenChecked(
       new Array(subjectWithChapters.chapters.length).fill(isChecked)
     );
+
+    if (isChecked) {
+      updateData(subjectIndex, subjectWithChapters.chapters);
+    } else {
+      updateData(subjectIndex, []);
+    }
   };
 
   const handleChildChange =
@@ -33,6 +44,14 @@ export default function IndeterminateCheckbox({
 
       const allChildrenChecked = newChildrenChecked.every((checked) => checked);
       setParentChecked(allChildrenChecked);
+
+      const checkedChapters: Chapter[] = [];
+      for (let i = 0; i < childrenChecked.length; i++) {
+        if (newChildrenChecked[i]) {
+          checkedChapters.push(subjectWithChapters.chapters[i]);
+        }
+      }
+      updateData(subjectIndex, checkedChapters);
     };
 
   return (

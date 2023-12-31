@@ -10,17 +10,23 @@ export type SubjectsWithChapters = {
   chapters: Chapter[];
 };
 
-export const ReadyTestMenu = () => {
+type ReadyTestProps = {
+  updateData: (data: Array<Chapter[]>) => void;
+};
+
+export const ReadyTestMenu = ({ updateData }: ReadyTestProps) => {
   const [subjectsWithChapters, setSubjectsWithChapters] = useState<
     SubjectsWithChapters[]
   >([]);
+
+  const [checkboxData, setCheckboxData] = useState<Array<Chapter[]>>([]);
 
   const getSubjectsWithChapters = async () => {
     const subjects = await axios
       .get(`${BASE_URL}/pages/api/subjects`)
       .then((res) => res.data.subjects);
 
-    const subjectsWithChapters: SubjectsWithChapters[] = [];
+    const data: SubjectsWithChapters[] = [];
 
     for (let i = 0; i < subjects.length; i++) {
       const chapters = await axios.get(
@@ -32,25 +38,40 @@ export const ReadyTestMenu = () => {
         chapters: chapters.data.chapters,
       };
 
-      subjectsWithChapters.push(subjectWithChapters);
+      data.push(subjectWithChapters);
     }
-    setSubjectsWithChapters(subjectsWithChapters);
+    setSubjectsWithChapters(data);
+  };
+
+  const updateCheckboxData = (index: number, data: any) => {
+    const newData = [...checkboxData];
+    newData[index] = data;
+    setCheckboxData(newData);
   };
 
   useEffect(() => {
-    getSubjectsWithChapters();
+    getSubjectsWithChapters().then(() =>
+      setCheckboxData(new Array(subjectsWithChapters.length).fill([]))
+    );
   }, []);
 
+  useEffect(() => {
+    setCheckboxData(new Array(subjectsWithChapters.length).fill([]));
+  }, [subjectsWithChapters]);
+
+  useEffect(() => {
+    updateData(checkboxData);
+  }, [checkboxData]);
+
   return (
-    <div
-      className="ready-test-menu"
-      style={{ padding: "20px" }}
-    >
-      {subjectsWithChapters.map((subjectWithChapters) => {
+    <div className="ready-test-menu">
+      {subjectsWithChapters.map((subjectWithChapters, index) => {
         return (
           <IndeterminateCheckbox
             subjectWithChapters={subjectWithChapters}
             key={`${subjectWithChapters.id}-indeterminate-checkbox`}
+            subjectIndex={index}
+            updateData={updateCheckboxData}
           />
         );
       })}

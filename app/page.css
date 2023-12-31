@@ -44,5 +44,6 @@ body {
         height: 100%;
         background-color: white;
         overflow-y: auto;
+        padding: 20px;
     }
 }

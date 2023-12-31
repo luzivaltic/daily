@@ -1,7 +1,10 @@
 import { Button } from "@mui/material";
 import { NavBarBoxItem } from "./NavBarBoxItem";
+import { useRootContext } from "../Context";
 
 export const SideNavBarTest = () => {
+  const RootContext = useRootContext();
+
   return (
     <div className="side-bar">
       <NavBarBoxItem key={"recent"}>
@@ -32,6 +35,7 @@ export const SideNavBarTest = () => {
             borderRadius: "100px",
             padding: "10px 20px",
           }}
+          onClick={() => RootContext?.setTesting(true)}
         >
           Start
         </Button>
@@ -43,6 +47,7 @@ export const SideNavBarTest = () => {
             borderRadius: "100px",
             padding: "10px 20px",
           }}
+          onClick={() => RootContext?.setReadyTest(false)}
         >
           Cancel
         </Button>

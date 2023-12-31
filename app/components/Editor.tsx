@@ -24,8 +24,6 @@ export const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     [editable]
   );
 
-  useEffect(() => {}, []);
-
   return (
     <div
       style={{

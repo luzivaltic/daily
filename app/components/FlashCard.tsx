@@ -16,6 +16,10 @@ interface FlashCardProps {
   updateFlashcards: () => void;
   edit: boolean;
   editing: boolean;
+  headerContent?: string;
+  flipButton?: boolean;
+  markButton?: boolean;
+  changeNote?: (content: string) => void;
 }
 
 export const FlashCard = ({
@@ -26,13 +30,24 @@ export const FlashCard = ({
   flashcardData,
   updateFlashcards,
   editing,
+  headerContent,
+  flipButton,
+  markButton,
+  changeNote,
 }: FlashCardProps) => {
   const [enter, setEnter] = useState(false);
   const [focus, setFocus] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const RootContext = useRootContext();
+  const [marked, setMarked] = useState(false);
 
   const onChange = async (content: string) => {
+    if (RootContext?.testing) {
+      if (changeNote) {
+        changeNote(content);
+      }
+      return;
+    }
     axios.put(`${BASE_URL}/pages/api/flashcards`, {
       flashcardId: flashcardData.id,
       frontContent: flipped ? flashcardData.front_content : content,
@@ -52,6 +67,10 @@ export const FlashCard = ({
   };
 
   const mergedFlashcardStyle = { ...defaultStyles, ...style };
+
+  useEffect(() => {}, [flashcardData]);
+
+  useEffect(() => {}, [RootContext?.currentTestFlashcard]);
 
   return (
     <div
@@ -79,7 +98,7 @@ export const FlashCard = ({
             fontSize: "16px",
           }}
         >
-          {flipped ? "Back" : "Front"}
+          {headerContent ? headerContent : flipped ? "Back" : "Front"}
         </span>
 
         <div
@@ -128,7 +147,7 @@ export const FlashCard = ({
           justifyContent: "space-evenly",
         }}
       >
-        {editing && (
+        {(editing || RootContext?.testing) && (
           <Button
             variant="outlined"
             onClick={() => {
@@ -140,6 +159,18 @@ export const FlashCard = ({
             Flip{" "}
           </Button>
         )}
+        {markButton && (
+          <Button
+            variant={marked ? "contained" : "outlined"}
+            onClick={() => {
+              setMarked(!marked);
+            }}
+          >
+            {" "}
+            Mark as correct{" "}
+          </Button>
+        )}
+
         {focus && <Button variant="outlined"> Flip </Button>}
       </footer>
     </div>

@@ -84,6 +84,10 @@ export const SideNavBarTesting = ({ flashcards }: TestDataProps) => {
             borderRadius: "100px",
             padding: "10px 50px",
           }}
+          onClick={() => {
+            RootContext?.setTesting(false);
+            RootContext?.setReadyTest(false);
+          }}
         >
           Finish
         </Button>

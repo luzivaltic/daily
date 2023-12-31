@@ -171,7 +171,6 @@ export const SideNavBar = () => {
           maxHeight: "70vh",
           overflow: "auto",
         }}
-        // key="List side nav bar"
       >
         {listSubject.map((subject: Subject, subjectIndex) => {
           return (

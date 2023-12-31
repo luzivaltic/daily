@@ -24,14 +24,26 @@ export const ChapterList = ({
   handleChangeChapter,
 }: ChapterListProps) => {
   const RootContext = useRootContext();
+
+  const selectedChapter: React.CSSProperties = {
+    backgroundColor: "gray",
+    marginLeft: "20px",
+  };
+
+  const defaultCssNavListItemButton: React.CSSProperties = {
+    marginLeft: "20px",
+  };
+
   return (
     <Collapse in={subjectIndex == chosenSubject} timeout="auto" unmountOnExit>
       {listChapter.map((chapter) => {
         return (
           <NavListItemButton
-            style={{
-              marginLeft: "20px",
-            }}
+            style={
+              chapter.id == RootContext?.chapterId
+                ? selectedChapter
+                : defaultCssNavListItemButton
+            }
             key={chapter.id}
             onClick={(e) => handleClickChapter(chapter.id)}
           >

@@ -9,7 +9,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 export default function ButtonAppBar() {
   return (
     <Box sx={{ flexGrow: 1, height: "64px", backgroundColor: "black" }}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        style={
+          {
+            // backgroundColor: "#D9D9D9",
+          }
+        }
+      >
         <Toolbar>
           <IconButton
             size="large"
@@ -20,7 +27,11 @@ export default function ButtonAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, color: "black" }}
+          >
             Learning
           </Typography>
         </Toolbar>

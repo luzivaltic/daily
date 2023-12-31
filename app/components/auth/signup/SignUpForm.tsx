@@ -1,11 +1,11 @@
-'use client'
+"use client";
 import { Button, Grid, InputAdornment, Link, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import UserInfo from "../types";
 import { useRouter } from "next/navigation";
-import PersonIcon from '@mui/icons-material/Person';
-import LockIcon from '@mui/icons-material/Lock';
+import PersonIcon from "@mui/icons-material/Person";
+import LockIcon from "@mui/icons-material/Lock";
 import SubmitButton from "../SubmitButton";
 import UsernameTextField from "../UsernameTextField";
 import EmailTextField from "../EmailTextField";
@@ -21,20 +21,23 @@ const SignUpForm = () => {
 
     const data = new FormData(event.currentTarget);
     const userInfo: UserInfo = {
-      username: data.get('username'),
-      email: data.get('email'),
-      password: data.get('password'),
-      passwordConfirm: data.get('passwordConfirm'),
-    }
-    const url = BASE_URL + '/pages/api/signup';
+      username: data.get("username"),
+      email: data.get("email"),
+      password: data.get("password"),
+      passwordConfirm: data.get("passwordConfirm"),
+    };
+    const url = BASE_URL + "/users/signup";
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(userInfo),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     assert(response.status === 201);
 
-    router.push('/pages/auth/login'); // redirect to login
+    router.push("/pages/auth/login"); // redirect to login
   };
 
   return (
@@ -54,19 +57,19 @@ const SignUpForm = () => {
         <Box
           component="form"
           noValidate
-          onSubmit={ handleSubmit }
+          onSubmit={handleSubmit}
           sx={{ mt: 3, mb: 2 }}
         >
           <UsernameTextField />
           <EmailTextField />
-          <PasswordTextField name="password" label="Password"/>
+          <PasswordTextField name="password" label="Password" />
           <PasswordTextField name="passwordConfirm" label="Password Confirm" />
           <SubmitButton content="sign up" />
-          
+
           <Grid container>
             <Grid item>
               Already have an account
-              <Link href="/pages/auth/login" style={{ textDecoration: 'none' }}>
+              <Link href="/pages/auth/login" style={{ textDecoration: "none" }}>
                 {" Login"}
               </Link>
             </Grid>

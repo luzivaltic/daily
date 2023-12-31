@@ -8,6 +8,8 @@ import { BaseFlashCardProps } from "../page";
 type TestingMenuProps = {
   noteFlashcard: BaseFlashCardProps;
   changeNote: (content: string) => void;
+  changeMarked: (marked: boolean) => void;
+  mark: boolean;
   movePrev: () => void;
   moveNext: () => void;
 };
@@ -17,6 +19,8 @@ export const TestingMenu = ({
   changeNote,
   moveNext,
   movePrev,
+  changeMarked,
+  mark,
 }: TestingMenuProps) => {
   const RootContext = useRootContext();
   const testingOnDelete = (id: string) => {
@@ -31,6 +35,8 @@ export const TestingMenu = ({
   useEffect(() => {
     setChangeContent(!changeContent);
   }, [noteFlashcard]);
+
+  useEffect(() => {}, []);
 
   return (
     <div
@@ -67,6 +73,9 @@ export const TestingMenu = ({
               height: "500px",
             }}
             markButton={true}
+            marked={mark}
+            changeMarked={changeMarked}
+            flipButton={true}
           />
         )}
         {noteFlashcard && (

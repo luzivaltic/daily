@@ -23,14 +23,14 @@ export const ReadyTestMenu = ({ updateData }: ReadyTestProps) => {
 
   const getSubjectsWithChapters = async () => {
     const subjects = await axios
-      .get(`${BASE_URL}/pages/api/subjects`)
+      .get(`${BASE_URL}/api/subjects`)
       .then((res) => res.data.subjects);
 
     const data: SubjectsWithChapters[] = [];
 
     for (let i = 0; i < subjects.length; i++) {
       const chapters = await axios.get(
-        `${BASE_URL}/pages/api/chapters/${subjects[i].id}`
+        `${BASE_URL}/api/chapters/${subjects[i].id}`
       );
       const subjectWithChapters: SubjectsWithChapters = {
         id: subjects[i].id,

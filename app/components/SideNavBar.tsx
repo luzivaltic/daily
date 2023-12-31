@@ -28,6 +28,7 @@ export const SideNavBar = () => {
   const [listSubject, setListSubject] = useState<Subject[]>([]);
   const [listChapter, setListChapter] = useState<Chapter[]>([]);
   const [chosenSubject, setChosenSubject] = useState(-1);
+  const [hovering, setHovering] = useState("");
   const RootContext = useRootContext();
 
   const handleClickSubject = (index: number) => {
@@ -44,9 +45,9 @@ export const SideNavBar = () => {
       setChosenSubject(-1);
     }
     return axios
-      .delete(`${BASE_URL}/pages/api/subjects`, {
+      .delete(`${BASE_URL}/api/subjects`, {
         data: {
-          subjectId: listSubject[index]?.id,
+          subject_id: listSubject[index]?.id,
         },
       })
       .then(() => updateStateListSubject());
@@ -57,19 +58,19 @@ export const SideNavBar = () => {
     subjectIndex: number
   ) => {
     event.stopPropagation();
-    return axios.put(`${BASE_URL}/pages/api/subjects`, {
-      subjectId: listSubject[subjectIndex].id,
+    return axios.put(`${BASE_URL}/api/subjects`, {
+      subject_id: listSubject[subjectIndex].id,
       title: event.currentTarget.value,
     });
   };
 
   const getListSubject = async () => {
-    const listSubject = await axios.get(`${BASE_URL}/pages/api/subjects`);
+    const listSubject = await axios.get(`${BASE_URL}/api/subjects`);
     return listSubject.data.subjects;
   };
 
   const getLearning = async () => {
-    const leanring = await axios.get(`${BASE_URL}/pages/api/learning`);
+    const leanring = await axios.get(`${BASE_URL}/api/learnings`);
     return leanring.data.learning;
   };
 
@@ -77,8 +78,8 @@ export const SideNavBar = () => {
     const learning = await getLearning();
 
     return axios
-      .post(`${BASE_URL}/pages/api/subjects`, {
-        learningId: learning?.id,
+      .post(`${BASE_URL}/api/subjects`, {
+        learning_id: learning?.id,
         title: "Untitled",
       })
       .then((subject) => console.log("successfully created subject: ", subject))
@@ -88,7 +89,7 @@ export const SideNavBar = () => {
 
   const getListChapter = async (subjectId: string) => {
     const listChapter = await axios.get(
-      `${BASE_URL}/pages/api/chapters/${subjectId}`
+      `${BASE_URL}/api/chapters/${subjectId}`
     );
     return listChapter.data.chapters;
   };
@@ -99,8 +100,8 @@ export const SideNavBar = () => {
   ) => {
     e.stopPropagation();
     return axios
-      .post(`${BASE_URL}/pages/api/chapters`, {
-        subjectId: listSubject[subjectIndex]?.id,
+      .post(`${BASE_URL}/api/chapters`, {
+        subject_id: listSubject[subjectIndex]?.id,
         title: "Untitled",
       })
       .then(() => updateStateListChapter());
@@ -111,17 +112,17 @@ export const SideNavBar = () => {
       RootContext?.setChapterId("");
     }
     axios
-      .delete(`${BASE_URL}/pages/api/chapters`, {
+      .delete(`${BASE_URL}/api/chapters`, {
         data: {
-          chapterId: chapterId,
+          chapter_id: chapterId,
         },
       })
       .then(() => updateStateListChapter());
   };
 
   const handleChangeChapter = (chapterId: string, title: string) => {
-    axios.put(`${BASE_URL}/pages/api/chapters`, {
-      chapterId: chapterId,
+    axios.put(`${BASE_URL}/api/chapters`, {
+      chapter_id: chapterId,
       title: title,
     });
   };
@@ -171,6 +172,7 @@ export const SideNavBar = () => {
           maxHeight: "70vh",
           overflow: "auto",
         }}
+        key={"list-side-bar"}
       >
         {listSubject.map((subject: Subject, subjectIndex) => {
           return (
@@ -178,6 +180,8 @@ export const SideNavBar = () => {
               <NavListItemButton
                 key={subject.id}
                 onClick={() => handleClickSubject(subjectIndex)}
+                onMouseEnter={() => setHovering(subject.id)}
+                onMouseLeave={() => setHovering("")}
               >
                 <NavBarBoxItem key={`${subject.id}-item`}>
                   <IconWrapper>
@@ -204,35 +208,39 @@ export const SideNavBar = () => {
                     />
                   </span>
 
-                  <Tooltip title="Delete subject">
-                    <Button
-                      sx={{
-                        margin: 0,
-                        padding: 0,
-                        minWidth: "unset",
-                      }}
-                      onClick={(e) => handleDeleteSubject(e, subjectIndex)}
-                    >
-                      <IconWrapper bgcolor="transparent">
-                        <DeleteIcon />
-                      </IconWrapper>
-                    </Button>
-                  </Tooltip>
+                  {hovering == subject.id && (
+                    <Tooltip title="Delete subject">
+                      <Button
+                        sx={{
+                          margin: 0,
+                          padding: 0,
+                          minWidth: "unset",
+                        }}
+                        onClick={(e) => handleDeleteSubject(e, subjectIndex)}
+                      >
+                        <IconWrapper bgcolor="transparent">
+                          <DeleteIcon />
+                        </IconWrapper>
+                      </Button>
+                    </Tooltip>
+                  )}
 
-                  <Tooltip title="New chapter">
-                    <Button
-                      sx={{
-                        margin: 0,
-                        padding: 0,
-                        minWidth: "unset",
-                      }}
-                      onClick={(e) => createNewChapter(e, subjectIndex)}
-                    >
-                      <IconWrapper bgcolor="transparent">
-                        <AddIcon />
-                      </IconWrapper>
-                    </Button>
-                  </Tooltip>
+                  {hovering == subject.id && (
+                    <Tooltip title="New chapter">
+                      <Button
+                        sx={{
+                          margin: 0,
+                          padding: 0,
+                          minWidth: "unset",
+                        }}
+                        onClick={(e) => createNewChapter(e, subjectIndex)}
+                      >
+                        <IconWrapper bgcolor="transparent">
+                          <AddIcon />
+                        </IconWrapper>
+                      </Button>
+                    </Tooltip>
+                  )}
                 </NavBarBoxItem>
               </NavListItemButton>
 

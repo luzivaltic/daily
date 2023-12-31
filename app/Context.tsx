@@ -1,5 +1,4 @@
-import { Chapter } from "@prisma/client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 import { BaseFlashCardProps } from "./page";
 
 export type ContextType = {

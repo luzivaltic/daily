@@ -19,7 +19,9 @@ interface FlashCardProps {
   headerContent?: string;
   flipButton?: boolean;
   markButton?: boolean;
+  marked?: boolean;
   changeNote?: (content: string) => void;
+  changeMarked?: (marked: boolean) => void;
 }
 
 export const FlashCard = ({
@@ -34,12 +36,13 @@ export const FlashCard = ({
   flipButton,
   markButton,
   changeNote,
+  marked,
+  changeMarked,
 }: FlashCardProps) => {
   const [enter, setEnter] = useState(false);
   const [focus, setFocus] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const RootContext = useRootContext();
-  const [marked, setMarked] = useState(false);
 
   const onChange = async (content: string) => {
     if (RootContext?.testing) {
@@ -48,10 +51,10 @@ export const FlashCard = ({
       }
       return;
     }
-    axios.put(`${BASE_URL}/pages/api/flashcards`, {
-      flashcardId: flashcardData.id,
-      frontContent: flipped ? flashcardData.front_content : content,
-      backContent: flipped ? content : flashcardData.back_content,
+    axios.put(`${BASE_URL}/api/flashcards`, {
+      flashcard_id: flashcardData.id,
+      front_content: flipped ? flashcardData.front_content : content,
+      back_content: flipped ? content : flashcardData.back_content,
     });
   };
 
@@ -147,7 +150,7 @@ export const FlashCard = ({
           justifyContent: "space-evenly",
         }}
       >
-        {(editing || RootContext?.testing) && (
+        {(editing || flipButton) && (
           <Button
             variant="outlined"
             onClick={() => {
@@ -159,11 +162,13 @@ export const FlashCard = ({
             Flip{" "}
           </Button>
         )}
-        {markButton && (
+
+        {markButton && changeMarked && (
           <Button
             variant={marked ? "contained" : "outlined"}
             onClick={() => {
-              setMarked(!marked);
+              changeMarked(!marked);
+              console.log("marked", marked);
             }}
           >
             {" "}

@@ -24,16 +24,7 @@ const Home = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [chapterId, setChapterId] = useState("");
   const [readyTest, setReadyTest] = useState(false);
-  const [testChapters, setTestChapters] = useState<Array<Chapter[]>>([
-    [
-      {
-        id: "clq2b5f4d000hj1xxu5p2srek",
-        subject_id: "clq13sutr001tj1gzdl94jjrx",
-        title: "chapter of something",
-      },
-    ],
-    [],
-  ]);
+  const [testChapters, setTestChapters] = useState<Array<Chapter[]>>([]);
   const [testing, setTesting] = useState(false);
   const [testFlashcards, setTestFlashcards] = useState<BaseFlashCardProps[]>(
     []
@@ -41,6 +32,7 @@ const Home = () => {
   const [noteFlashcards, setNoteFlashcards] = useState<BaseFlashCardProps[]>(
     []
   );
+  const [markedFlashcards, setMarkedFlashcards] = useState<boolean[]>([]);
 
   const [currentTestFlashcard, setCurrentTestFlashcard] =
     useState<BaseFlashCardProps>({
@@ -55,8 +47,20 @@ const Home = () => {
       back_content: "",
     });
 
+  const [currentMarkedFlashcard, setCurrentMarkedFlashcard] =
+    useState<boolean>(false);
+
   const updateData = (data: Array<Chapter[]>) => {
     setTestChapters(data);
+  };
+
+  const shuffleArray = (arr: BaseFlashCardProps[]) => {
+    const arrCopy = [...arr];
+    for (let i = arrCopy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arrCopy[i], arrCopy[j]] = [arrCopy[j], arrCopy[i]];
+    }
+    return arrCopy;
   };
 
   const getTestingFlashcards = async () => {
@@ -64,18 +68,28 @@ const Home = () => {
     for (let i = 0; i < testChapters.length; i++) {
       for (let j = 0; j < testChapters[i].length; j++) {
         const res = await axios
-          .get(`${BASE_URL}/pages/api/flashcards/${testChapters[i][j].id}`)
+          .get(`${BASE_URL}/api/flashcards/chapter_id/${testChapters[i][j].id}`)
           .then((res) => res.data.flashcards);
         testingFlashcards.push(...res);
       }
     }
-    return testingFlashcards;
+    const res = shuffleArray(testingFlashcards);
+    return res;
   };
 
   const getCurrentIndex = () => {
     return testFlashcards.findIndex(
       (flashcard) => flashcard.id == currentTestFlashcard.id
     );
+  };
+
+  const changeCurrentMarkedFlashcard = (marked: boolean) => {
+    const index = getCurrentIndex();
+    const newMarkedFlashcards = [...markedFlashcards];
+    newMarkedFlashcards[index] = marked;
+
+    setCurrentMarkedFlashcard(marked);
+    setMarkedFlashcards(newMarkedFlashcards);
   };
 
   const changeCurrentNoteFlashcard = (content: string) => {
@@ -109,13 +123,12 @@ const Home = () => {
     const valid = token !== null;
     setIsAuthorized(valid);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    axios.defaults.headers.common["Content-Type"] = "application/json";
 
     if (!valid) {
       router.push("/pages/auth/login");
     }
   }, []);
-
-  useEffect(() => {}, [testChapters]);
 
   useEffect(() => {
     getTestingFlashcards().then((res) => {
@@ -136,8 +149,9 @@ const Home = () => {
 
   useEffect(() => {
     const index = getCurrentIndex();
-    if (index >= 0) {
+    if (0 <= index && index < noteFlashcards.length) {
       setCurrentNoteFlashcard(noteFlashcards[index]);
+      setCurrentMarkedFlashcard(markedFlashcards[index]);
     }
   }, [currentTestFlashcard]);
 
@@ -172,6 +186,8 @@ const Home = () => {
                 changeNote={changeCurrentNoteFlashcard}
                 moveNext={moveNext}
                 movePrev={movePrev}
+                mark={currentMarkedFlashcard}
+                changeMarked={changeCurrentMarkedFlashcard}
               />
             )}
           </div>

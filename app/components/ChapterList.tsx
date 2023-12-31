@@ -5,6 +5,7 @@ import { IconWrapper } from "./IconWrapper";
 import ArticleIcon from "@mui/icons-material/Article";
 import { useRootContext } from "../Context";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useEffect, useState } from "react";
 
 type ChapterListProps = {
   subjectIndex: number;
@@ -23,6 +24,7 @@ export const ChapterList = ({
   handleClickChapter,
   handleChangeChapter,
 }: ChapterListProps) => {
+  const [hovering, setHovering] = useState("");
   const RootContext = useRootContext();
 
   const selectedChapter: React.CSSProperties = {
@@ -45,7 +47,9 @@ export const ChapterList = ({
                 : defaultCssNavListItemButton
             }
             key={chapter.id}
-            onClick={(e) => handleClickChapter(chapter.id)}
+            onClick={() => handleClickChapter(chapter.id)}
+            onMouseEnter={() => setHovering(chapter.id)}
+            onMouseLeave={() => setHovering("")}
           >
             <NavBarBoxItem>
               <IconWrapper>
@@ -69,23 +73,25 @@ export const ChapterList = ({
                 />
               </span>
 
-              <Tooltip title="Delete chapter">
-                <Button
-                  sx={{
-                    margin: 0,
-                    padding: 0,
-                    minWidth: "unset",
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteChapter(chapter.id);
-                  }}
-                >
-                  <IconWrapper bgcolor="transparent">
-                    <DeleteIcon />
-                  </IconWrapper>
-                </Button>
-              </Tooltip>
+              {hovering == chapter.id && (
+                <Tooltip title="Delete chapter">
+                  <Button
+                    sx={{
+                      margin: 0,
+                      padding: 0,
+                      minWidth: "unset",
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteChapter(chapter.id);
+                    }}
+                  >
+                    <IconWrapper bgcolor="transparent">
+                      <DeleteIcon />
+                    </IconWrapper>
+                  </Button>
+                </Tooltip>
+              )}
             </NavBarBoxItem>
           </NavListItemButton>
         );

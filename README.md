@@ -38,12 +38,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## How to connect to local database
 
 - Connect to `prisma`
+
 ```
 $ npm install @prisma/client
 $ npx prisma init
 ```
 
 - Install `sql` on terminal and create new user
+
 ```
 $ CREATE USER 'daily'@'localhost' IDENTIFIED BY 'password'
 $ GRANT ALL PRIVILEGES ON *.* TO 'daily'@'localhost' WITH GRANT OPTION;
@@ -51,6 +53,7 @@ $ FLUSH PRIVILEGES;
 ```
 
 - CREATE DATABASE `daily`
+
 ```
 $ CREATE DATABASE daily;
 ```
@@ -59,11 +62,15 @@ $ CREATE DATABASE daily;
 
 - Create / Modify `models` on file `schema.prisma`
 - Migrate
+
 ```
 $ npx prisma migrate dev --preview-feature
 ```
 
-- Run `prisma-cli`: 
+- Run `prisma-cli`:
+
 ```
 $ npx prisma studio
-``` 
+```
+
+export $(grep -v '^#' .env | xargs)

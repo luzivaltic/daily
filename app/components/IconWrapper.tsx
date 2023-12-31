@@ -7,8 +7,8 @@ interface Props extends PaperProps {
 }
 
 export const IconWrapper = ({ children, ...paperProps }: Props) => {
-  const { bgcolor } = paperProps; 
-  
+  const { bgcolor } = paperProps;
+
   return (
     <Paper
       elevation={0}
@@ -19,6 +19,7 @@ export const IconWrapper = ({ children, ...paperProps }: Props) => {
         alignItems: "center",
         padding: "5px",
         borderRadius: "10px",
+        cursor: "pointer",
         backgroundColor: bgcolor ? bgcolor : "#E8E8E8",
         ":hover": {
           backgroundColor: "gray",

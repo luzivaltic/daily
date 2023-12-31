@@ -1,61 +1,85 @@
-import { Button, List } from "@mui/material";
+"use client";
+import { Button, Input, List, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { IconWrapper } from "./IconWrapper";
 import { NavBarBoxItem } from "./NavBarBoxItem";
 import { NavListItemButton } from "./NavListItemButton";
 import React, { useEffect, useState } from "react";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { ChapterList } from "./ChapterList";
 import axios from "axios";
 import { BASE_URL } from "../env";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useRootContext } from "../Context";
 
-type Subject = {
+export type Subject = {
   id: string;
   title: string;
 };
 
-type Chapter = {
+export type Chapter = {
   id: string;
   title: string;
   subject_id: string;
 };
 
-
 export const SideNavBar = () => {
   const [listSubject, setListSubject] = useState<Subject[]>([]);
   const [listChapter, setListChapter] = useState<Chapter[]>([]);
-  const [chosenSubject, setChosenSubject] = useState(10000);
-
-  axios.defaults.headers.common["Authorization"] = `Bearer ${window.sessionStorage.getItem(
-    "access_token"
-  )}`;
+  const [chosenSubject, setChosenSubject] = useState(-1);
+  const [hovering, setHovering] = useState("");
+  const RootContext = useRootContext();
 
   const handleClickSubject = (index: number) => {
-    if (chosenSubject == index) {
-      setChosenSubject(10000);
-    } else {
+    if (chosenSubject != index) {
       setChosenSubject(index);
     }
   };
 
+  const handleDeleteSubject = async (
+    event: React.MouseEvent<HTMLElement>,
+    index: number
+  ) => {
+    if (index == chosenSubject) {
+      setChosenSubject(-1);
+    }
+    return axios
+      .delete(`${BASE_URL}/api/subjects`, {
+        data: {
+          subject_id: listSubject[index]?.id,
+        },
+      })
+      .then(() => updateStateListSubject());
+  };
+
+  const handleChangeSubject = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    subjectIndex: number
+  ) => {
+    event.stopPropagation();
+    return axios.put(`${BASE_URL}/api/subjects`, {
+      subject_id: listSubject[subjectIndex].id,
+      title: event.currentTarget.value,
+    });
+  };
+
   const getListSubject = async () => {
-    const listSubject = await axios.get(`${BASE_URL}/pages/api/subjects`);
+    const listSubject = await axios.get(`${BASE_URL}/api/subjects`);
     return listSubject.data.subjects;
   };
 
   const getLearning = async () => {
-    const leanring = await axios.get(`${BASE_URL}/pages/api/learning`);
+    const leanring = await axios.get(`${BASE_URL}/api/learnings`);
     return leanring.data.learning;
   };
 
   const createNewSubject = async () => {
     const learning = await getLearning();
 
-    return await axios
-      .post(`${BASE_URL}/pages/api/subjects`, {
-        learningId: learning.id,
+    return axios
+      .post(`${BASE_URL}/api/subjects`, {
+        learning_id: learning?.id,
         title: "Untitled",
       })
       .then((subject) => console.log("successfully created subject: ", subject))
@@ -65,7 +89,7 @@ export const SideNavBar = () => {
 
   const getListChapter = async (subjectId: string) => {
     const listChapter = await axios.get(
-      `${BASE_URL}/pages/api/chapters/${subjectId}`
+      `${BASE_URL}/api/chapters/${subjectId}`
     );
     return listChapter.data.chapters;
   };
@@ -75,12 +99,36 @@ export const SideNavBar = () => {
     subjectIndex: number
   ) => {
     e.stopPropagation();
-    return await axios
-      .post(`${BASE_URL}/pages/api/chapters`, {
-        subjectId: listSubject[subjectIndex].id,
+    return axios
+      .post(`${BASE_URL}/api/chapters`, {
+        subject_id: listSubject[subjectIndex]?.id,
         title: "Untitled",
       })
       .then(() => updateStateListChapter());
+  };
+
+  const handleDeleteChapter = (chapterId: string) => {
+    if (chapterId == RootContext?.chapterId) {
+      RootContext?.setChapterId("");
+    }
+    axios
+      .delete(`${BASE_URL}/api/chapters`, {
+        data: {
+          chapter_id: chapterId,
+        },
+      })
+      .then(() => updateStateListChapter());
+  };
+
+  const handleChangeChapter = (chapterId: string, title: string) => {
+    axios.put(`${BASE_URL}/api/chapters`, {
+      chapter_id: chapterId,
+      title: title,
+    });
+  };
+
+  const handleClickChapter = (chapterId: string) => {
+    RootContext?.setChapterId(chapterId);
   };
 
   const updateStateListSubject = async () => {
@@ -91,7 +139,7 @@ export const SideNavBar = () => {
   const updateStateListChapter = async () => {
     if (chosenSubject != 10000) {
       const newListChapter = await getListChapter(
-        listSubject[chosenSubject].id
+        listSubject[chosenSubject]?.id
       );
       setListChapter(newListChapter);
     }
@@ -102,6 +150,10 @@ export const SideNavBar = () => {
   }, [chosenSubject]);
 
   useEffect(() => {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${window.sessionStorage.getItem("access_token")}`;
+
     updateStateListSubject();
   }, []);
 
@@ -120,15 +172,18 @@ export const SideNavBar = () => {
           maxHeight: "70vh",
           overflow: "auto",
         }}
+        key={"list-side-bar"}
       >
         {listSubject.map((subject: Subject, subjectIndex) => {
           return (
             <>
               <NavListItemButton
-                key={subjectIndex}
+                key={subject.id}
                 onClick={() => handleClickSubject(subjectIndex)}
+                onMouseEnter={() => setHovering(subject.id)}
+                onMouseLeave={() => setHovering("")}
               >
-                <NavBarBoxItem key={subjectIndex}>
+                <NavBarBoxItem key={`${subject.id}-item`}>
                   <IconWrapper>
                     {subjectIndex == chosenSubject ? (
                       <ExpandMore />
@@ -136,6 +191,7 @@ export const SideNavBar = () => {
                       <LocalLibraryIcon />
                     )}
                   </IconWrapper>
+
                   <span
                     style={{
                       marginLeft: "10px",
@@ -145,34 +201,46 @@ export const SideNavBar = () => {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    {" "}
-                    {subject.title}{" "}
+                    <Input
+                      defaultValue={subject.title}
+                      disableUnderline={true}
+                      onChange={(e) => handleChangeSubject(e, subjectIndex)}
+                    />
                   </span>
-                  <Button
-                    sx={{
-                      margin: 0,
-                      padding: 0,
-                      minWidth: "unset",
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <IconWrapper bgcolor="transparent">
-                      <MoreHorizIcon />
-                    </IconWrapper>
-                  </Button>
 
-                  <Button
-                    sx={{
-                      margin: 0,
-                      padding: 0,
-                      minWidth: "unset",
-                    }}
-                    onClick={(e) => createNewChapter(e, subjectIndex)}
-                  >
-                    <IconWrapper bgcolor="transparent">
-                      <AddIcon />
-                    </IconWrapper>
-                  </Button>
+                  {hovering == subject.id && (
+                    <Tooltip title="Delete subject">
+                      <Button
+                        sx={{
+                          margin: 0,
+                          padding: 0,
+                          minWidth: "unset",
+                        }}
+                        onClick={(e) => handleDeleteSubject(e, subjectIndex)}
+                      >
+                        <IconWrapper bgcolor="transparent">
+                          <DeleteIcon />
+                        </IconWrapper>
+                      </Button>
+                    </Tooltip>
+                  )}
+
+                  {hovering == subject.id && (
+                    <Tooltip title="New chapter">
+                      <Button
+                        sx={{
+                          margin: 0,
+                          padding: 0,
+                          minWidth: "unset",
+                        }}
+                        onClick={(e) => createNewChapter(e, subjectIndex)}
+                      >
+                        <IconWrapper bgcolor="transparent">
+                          <AddIcon />
+                        </IconWrapper>
+                      </Button>
+                    </Tooltip>
+                  )}
                 </NavBarBoxItem>
               </NavListItemButton>
 
@@ -180,6 +248,9 @@ export const SideNavBar = () => {
                 subjectIndex={subjectIndex}
                 chosenSubject={chosenSubject}
                 listChapter={listChapter}
+                handleDeleteChapter={handleDeleteChapter}
+                handleClickChapter={handleClickChapter}
+                handleChangeChapter={handleChangeChapter}
               />
             </>
           );

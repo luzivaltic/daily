@@ -1,76 +1,25 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Daily
 
-## Getting Started
+## Hướng dẫn sử dụng
 
-First, run the development server:
+## Đăng nhập
+Đăng nhập hoặc đăng ký nếu chưa có tài khoản.
+Tài khoản mẫu: luzi@gmail.com
+password: password
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Thao tác với side bar
+Nhấn nút ‘+ New subject’ để tạo subject mới.
+Trỏ vào subject mới được tạo ra sẽ có 2 lựa chọn là tạo chapter mới hoặc xoá subject hiện tại.
+Tên của subject hoặc chapter đều có thể chỉnh sửa tuỳ ý ( Nhấn chuột trái vào tên ).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Thao tác với main menu
+Tiếp đến chọn một chapter, những flashcard được user tạo ra của chapter này sẽ lưu hiện lên ở main menu bên phải. Góc phải của main menu sẽ có 2 nút để tạo thêm flashcard mới cho chapter hiện tại, hoặc vào Test Mode.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Chỉnh sửa flashcard
+Khi nhấn vào flashcard , user có thể thêm text, list, link hoặc ảnh ( url online ) vào cả mặt trước và mặt sau bằng cách sử dụng nút ‘Flip’. User cũng có thể xoá flashcard bằng biểu tượng thùng rác góc phải trên màn hình.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-## How to connect to local database
-
-- Connect to `prisma`
-
-```
-$ npm install @prisma/client
-$ npx prisma init
-```
-
-- Install `sql` on terminal and create new user
-
-```
-$ CREATE USER 'daily'@'localhost' IDENTIFIED BY 'password'
-$ GRANT ALL PRIVILEGES ON *.* TO 'daily'@'localhost' WITH GRANT OPTION;
-$ FLUSH PRIVILEGES;
-```
-
-- CREATE DATABASE `daily`
-
-```
-$ CREATE DATABASE daily;
-```
-
-- Change `DATABASE_URL` on .env to `mysql://daily:password@localhost:3306/daily`
-
-- Create / Modify `models` on file `schema.prisma`
-- Migrate
-
-```
-$ npx prisma migrate dev --preview-feature
-```
-
-- Run `prisma-cli`:
-
-```
-$ npx prisma studio
-```
-
-export $(grep -v '^#' .env | xargs)
+## Test Mode
+Nhấn Cancel để quay lại. 
+Khi bắt đầu test mode, user sẽ lựa chọn những chapter mà mình muốn ôn lại kiến thức và nhấn Start. Những flashcard này sẽ được đảo ngẫu nhiên.
+Với mỗi flashcard, user có thể xem nội dung mặt trước, khi bí có thể lập xem nội dung mặt sau :), và viết lại câu trả lời của mình vào editor bên cạnh. Nội dung của từng editor sẽ được lưu lại nếu user quay lại flashcard đó. Mỗi flashcard có thể được ‘Mark as correct’ nếu user cảm thấy bản thân đã nhớ được kiến thức trong flashcard đó. 
+Nhấn ‘Finish’ user đã kiểm tra kiến thức xong.

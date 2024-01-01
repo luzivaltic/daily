@@ -1,5 +1,28 @@
 ## Daily
 
+## Setup trên local
+- Tạo file `.env` từ file `env.example`, thay đổi các giá trị và chạy `export`
+```
+$ export $(grep -v '^#' .env | xargs)
+```
+- Cài đặt packages
+```
+$ npm install
+```
+- Chạy chương trình
+```
+$ npm run dev
+```
+
+## Deploy (Optional)
+- Export ra static file
+```
+$ npm run build
+$ npm run export
+```
+
+- Copy file `out/` vào Backend `dailybe` workspace
+
 ## Hướng dẫn sử dụng
 
 ## Đăng nhập
